@@ -1,9 +1,22 @@
 import { Product, Review } from '../types';
 
+export const STORE_INFO = {
+  name: 'DJStyleHub',
+  domain: 'https://djstylehub.com',
+  tagline: 'Exclusive Dress Materials for Women & Kids',
+  whatsappNumber: '+919876543210',
+  displayPhone: '+91 98765 43210',
+  email: 'orders@djstylehub.com',
+  address: 'Shop #14, Fashion Square, Near Central Market, Commercial Street',
+  city: 'Bangalore, Karnataka - 560001',
+  supportHours: 'Mon - Sat: 9:30 AM - 8:30 PM (IST)'
+};
+
 export const PRODUCTS: Product[] = [
   // --- WOMEN'S DRESS MATERIALS ---
   {
     id: 'w-01',
+    slug: 'jaipuri-handblock-pure-mulmul-cotton-suit-material',
     name: 'Jaipuri Handblock Pure Mulmul Cotton Suit Material',
     category: 'women',
     subcategory: 'Pure Cotton Suits',
@@ -35,6 +48,7 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: 'w-02',
+    slug: 'royal-chanderi-silk-zari-woven-unstitched-suit-set',
     name: 'Royal Chanderi Silk Zari Woven Unstitched Suit Set',
     category: 'women',
     subcategory: 'Chanderi Silk',
@@ -65,6 +79,7 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: 'w-03',
+    slug: 'lucknowi-chikankari-georgette-fabric',
     name: 'Lucknowi Chikankari Georgette Fabric with Pearl Detailing',
     category: 'women',
     subcategory: 'Georgette Embroidered',
@@ -95,6 +110,7 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: 'w-04',
+    slug: 'banarasi-brocade-silk-unstitched-suit',
     name: 'Banarasi Brocade Silk Unstitched Wedding Suit',
     category: 'women',
     subcategory: 'Banarasi Silk',
@@ -125,6 +141,7 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: 'w-05',
+    slug: 'pure-handloom-linen-cotton-floral-material',
     name: 'Pure Handloom Linen Cotton Floral Material Set',
     category: 'women',
     subcategory: 'Pure Cotton Suits',
@@ -155,6 +172,7 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: 'w-06',
+    slug: 'kashmiri-tilla-embroidered-organza-suit',
     name: 'Kashmiri Tilla Embroidered Organza Suit Material',
     category: 'women',
     subcategory: 'Organza',
@@ -185,6 +203,7 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: 'w-07',
+    slug: 'authentic-kutch-bandhani-modal-silk-suit',
     name: 'Authentic Kutch Bandhani Modal Silk Suit Set',
     category: 'women',
     subcategory: 'Silk Blend',
@@ -215,6 +234,7 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: 'w-08',
+    slug: 'everyday-indigo-dabu-print-cambric-suit',
     name: 'Everyday Indigo Dabu Print 60s Cambric Suit Material',
     category: 'women',
     subcategory: 'Pure Cotton Suits',
@@ -247,6 +267,7 @@ export const PRODUCTS: Product[] = [
   // --- KIDS' DRESS MATERIALS ---
   {
     id: 'k-01',
+    slug: 'kids-festive-jacquard-kurta-pyjama-fabric',
     name: 'Kids Festive Jacquard Kurta-Pyjama Unstitched Fabric Set',
     category: 'kids',
     subcategory: 'Boys Festive Fabric',
@@ -277,6 +298,7 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: 'k-02',
+    slug: 'little-princess-soft-brocade-lehenga-choli',
     name: 'Little Princess Soft Brocade Lehenga-Choli Material Set',
     category: 'kids',
     subcategory: 'Girls Ethnic Materials',
@@ -307,6 +329,7 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: 'k-03',
+    slug: 'kids-organic-mul-cotton-frock-kurti-material',
     name: 'Kids Organic Mul Cotton Frock & Kurti Unstitched Material',
     category: 'kids',
     subcategory: 'Girls Casual Materials',
@@ -337,6 +360,7 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: 'k-04',
+    slug: 'boys-raw-silk-festive-kurta-jacket-fabric',
     name: 'Boys Raw Silk Blend Festive Kurta & Bundi Jacket Fabric',
     category: 'kids',
     subcategory: 'Boys Festive Fabric',
@@ -367,6 +391,7 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: 'k-05',
+    slug: 'kids-floral-organza-anarkali-dress-material',
     name: 'Kids Floral Organza Fairy Anarkali Dress Material',
     category: 'kids',
     subcategory: 'Girls Ethnic Materials',
@@ -397,6 +422,7 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: 'k-06',
+    slug: 'traditional-kutch-bandhani-cotton-kids',
     name: 'Traditional Kutch Bandhani Cotton Material for Kids',
     category: 'kids',
     subcategory: 'Girls Ethnic Materials',
@@ -454,13 +480,20 @@ export const REVIEWS: Review[] = [
   }
 ];
 
-export const STORE_INFO = {
-  name: 'DJ Style Hub',
-  tagline: 'Exclusive Dress Materials for Women & Kids',
-  whatsappNumber: '+919876543210',
-  displayPhone: '+91 98765 43210',
-  email: 'orders@djstylehub.com',
-  address: 'Shop #14, Fashion Square, Near Central Market, Commercial Street',
-  city: 'Bangalore, Karnataka - 560001',
-  supportHours: 'Mon - Sat: 9:30 AM - 8:30 PM (IST)'
-};
+// Helper functions for SEO & Routing
+export function getProductBySlugOrId(identifier: string): Product | undefined {
+  const cleanId = identifier.toLowerCase().trim();
+  return PRODUCTS.find(p => p.slug.toLowerCase() === cleanId || p.id.toLowerCase() === cleanId);
+}
+
+export function getProductsByCategory(category: 'women' | 'kids'): Product[] {
+  return PRODUCTS.filter(p => p.category === category);
+}
+
+export function getRelatedProducts(productId: string, limit = 4): Product[] {
+  const current = PRODUCTS.find(p => p.id === productId);
+  if (!current) return PRODUCTS.slice(0, limit);
+  return PRODUCTS
+    .filter(p => p.id !== productId && p.category === current.category)
+    .slice(0, limit);
+}

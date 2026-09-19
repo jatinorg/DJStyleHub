@@ -2,6 +2,7 @@ export type CategoryType = 'all' | 'women' | 'kids';
 
 export interface Product {
   id: string;
+  slug: string;
   name: string;
   category: 'women' | 'kids';
   subcategory: string;

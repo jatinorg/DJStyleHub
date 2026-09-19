@@ -1,0 +1,12 @@
+# https://www.robotstxt.org/robotstxt.html
+User-agent: *
+Allow: /
+
+# Disallow private and checkout endpoints
+Disallow: /cart
+Disallow: /checkout
+Disallow: /admin
+Disallow: /api/
+
+# Sitemap location
+Sitemap: https://djstylehub.com/sitemap.xml
