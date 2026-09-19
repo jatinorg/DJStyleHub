@@ -14,42 +14,42 @@ export const BrandLogo: React.FC<BrandLogoProps> = ({
 }) => {
   const isDark = variant === 'dark';
 
+  // Sizing configurations
+  const logoHeight =
+    size === 'sm'
+      ? 'h-10 sm:h-11'
+      : size === 'lg'
+      ? 'h-14 sm:h-16'
+      : 'h-12 sm:h-14';
+
   return (
     <Link 
       to="/" 
-      className="inline-flex items-center gap-2.5 group select-none"
+      className="inline-flex items-center gap-2.5 group select-none transition-transform active:scale-98"
       title="DJ Style Hub – Wear Your Story"
     >
-      {/* Brand Monogram Icon */}
-      <div className="relative overflow-hidden rounded-xl shrink-0 shadow-xs border border-amber-300/40 w-10 h-10 sm:w-11 sm:h-11">
+      <div 
+        className={`relative overflow-hidden transition-all duration-300 inline-flex items-center ${
+          isDark 
+            ? 'bg-white px-2.5 py-1.5 rounded-xl shadow-xs' 
+            : 'bg-transparent'
+        }`}
+      >
         <img
-          src="/images/dj-logo-mark.jpg"
-          alt="DJ Style Hub Emblem"
-          width={48}
-          height={48}
-          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+          src="/images/dj-logo.jpg"
+          alt="DJ Style Hub – Wear Your Story"
+          className={`${logoHeight} w-auto object-contain transition-transform group-hover:scale-102`}
+          loading="eager"
         />
-      </div>
-
-      {/* Brand Text */}
-      <div className="flex flex-col text-left">
-        <span 
-          className={`font-serif tracking-tight font-bold leading-none ${
-            isDark ? 'text-white' : 'text-maroon-950'
-          } ${
-            size === 'sm' ? 'text-lg' : size === 'lg' ? 'text-2xl sm:text-3xl' : 'text-xl sm:text-2xl'
-          }`}
-        >
-          DJ <span className={isDark ? 'text-gold-400 font-serif' : 'text-gold-600 font-serif'}>STYLE HUB</span>
-        </span>
-        {showTagline && (
-          <span 
-            className={`text-[9px] sm:text-[10px] tracking-[0.28em] uppercase font-semibold mt-0.5 ${
-              isDark ? 'text-gold-300/90' : 'text-neutral-500'
-            }`}
-          >
-            Wear Your Story
-          </span>
+        {showTagline && !isDark && (
+          <div className="hidden xl:flex flex-col border-l border-neutral-300/80 pl-2.5 ml-1 text-left">
+            <span className="text-[9px] tracking-[0.24em] uppercase font-bold text-neutral-500">
+              Wear Your
+            </span>
+            <span className="text-[9px] tracking-[0.24em] uppercase font-bold text-[#8d1a37]">
+              Story
+            </span>
+          </div>
         )}
       </div>
     </Link>

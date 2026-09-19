@@ -61,7 +61,7 @@ export const HomePage: React.FC<HomePageProps> = ({
       '@type': 'Organization',
       name: 'DJStyleHub',
       url: 'https://djstylehub.com/',
-      logo: 'https://djstylehub.com/images/dj-logo-mark.jpg',
+      logo: 'https://djstylehub.com/images/dj-logo.jpg',
       description: 'Exclusive online store for premium ethnic wear, sarees, unstitched dress materials, and fabrics across India.',
       contactPoint: {
         '@type': 'ContactPoint',
