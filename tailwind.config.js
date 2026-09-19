@@ -7,36 +7,36 @@ export default {
   theme: {
     extend: {
       colors: {
-        brand: {
-          50: '#fdf7f6',
-          100: '#faeee9',
-          200: '#f6dbd5',
-          300: '#edbdb3',
-          400: '#df9487',
-          500: '#ce6b5c',
-          600: '#b84e41',
-          700: '#9b3d32',
-          800: '#81352c',
-          900: '#6d3029',
-          950: '#3a1612',
+        maroon: {
+          50: '#fdf2f4',
+          100: '#fce7ea',
+          200: '#f9d0d7',
+          300: '#f4a9b7',
+          400: '#ec778f',
+          500: '#df486b',
+          600: '#ca2a51',
+          700: '#aa1c3f',
+          800: '#8d1a37',
+          900: '#5c0d23',
+          950: '#450719',
         },
         gold: {
-          400: '#facc15',
-          500: '#eab308',
-          600: '#ca8a04',
-          700: '#a16207',
+          300: '#f2d48f',
+          400: '#e8c171',
+          500: '#c99a38',
+          600: '#aa7b25',
+          700: '#865e1c',
         },
-        sand: {
-          50: '#fcfbf9',
-          100: '#f7f5f0',
-          200: '#eee8df',
-          300: '#dfd4c5',
-          400: '#c8b6a3',
+        warm: {
+          cream: '#faf4f0',
+          peach: '#fdf7f4',
+          sand: '#f6ede6',
         }
       },
       fontFamily: {
         serif: ['"Playfair Display"', 'Georgia', 'serif'],
         sans: ['"Plus Jakarta Sans"', 'Inter', 'system-ui', 'sans-serif'],
+        cursive: ['"Caveat"', 'cursive'],
       }
     },
   },

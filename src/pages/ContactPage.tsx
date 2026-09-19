@@ -6,7 +6,7 @@ import { STORE_INFO } from '../data/products';
 
 export const ContactPage: React.FC = () => {
   const pageTitle = 'Contact DJStyleHub | Customer Support';
-  const pageDescription = 'Contact DJStyleHub customer support. Reach out via WhatsApp, phone, or visit our studio in Bangalore for unstitched dress materials.';
+  const pageDescription = 'Contact DJStyleHub customer support. Reach out via WhatsApp, phone, or email for dress materials, unstitched suit lengths, and orders.';
   const canonicalUrl = 'https://djstylehub.com/contact';
 
   const breadcrumbs = [
@@ -20,19 +20,11 @@ export const ContactPage: React.FC = () => {
     description: pageDescription,
     url: canonicalUrl,
     mainEntity: {
-      '@type': 'LocalBusiness',
+      '@type': 'Organization',
       name: 'DJStyleHub',
-      telephone: '+91-98765-43210',
+      telephone: STORE_INFO.displayPhone,
       email: STORE_INFO.email,
-      address: {
-        '@type': 'PostalAddress',
-        streetAddress: STORE_INFO.address,
-        addressLocality: 'Bangalore',
-        addressRegion: 'Karnataka',
-        postalCode: '560001',
-        addressCountry: 'IN'
-      },
-      openingHours: 'Mo-Sa 09:30-20:30'
+      url: 'https://djstylehub.com/'
     }
   };
 
@@ -49,10 +41,10 @@ export const ContactPage: React.FC = () => {
 
       <header className="py-4 border-b border-neutral-200">
         <h1 className="font-serif text-3xl font-bold text-neutral-900">
-          Contact Customer Support
+          Customer Support &amp; Direct Orders
         </h1>
         <p className="text-xs sm:text-sm text-neutral-600 mt-1">
-          Have a question about fabric meterage, unstitched suit lengths, or placing an order? We are here to help.
+          Have a question about fabric meterage, unstitched suit lengths, or placing an order? Reach our WhatsApp team directly.
         </p>
       </header>
 

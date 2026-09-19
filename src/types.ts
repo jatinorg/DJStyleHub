@@ -1,10 +1,10 @@
-export type CategoryType = 'all' | 'women' | 'kids';
+export type CategoryType = 'all' | 'women' | 'kids' | 'men' | 'fabrics' | 'accessories' | 'sarees';
 
 export interface Product {
   id: string;
   slug: string;
   name: string;
-  category: 'women' | 'kids';
+  category: 'women' | 'kids' | 'men' | 'fabrics' | 'accessories' | 'sarees';
   subcategory: string;
   fabric: string;
   occasion: 'Daily Wear' | 'Festive' | 'Party Wear' | 'Wedding Occasion';

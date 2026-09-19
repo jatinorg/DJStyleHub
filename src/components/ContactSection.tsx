@@ -1,5 +1,5 @@
 import React from 'react';
-import { MapPin, Phone, MessageCircle, Clock } from 'lucide-react';
+import { Phone, MessageCircle, Clock, Truck, ShieldCheck } from 'lucide-react';
 import { STORE_INFO } from '../data/products';
 
 export const ContactSection: React.FC = () => {
@@ -9,42 +9,43 @@ export const ContactSection: React.FC = () => {
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-10 items-start">
           
-          {/* Left: Contact Info */}
+          {/* Left: Contact Info - No physical shop address */}
           <div className="space-y-5">
             <div>
-              <span className="text-xs uppercase tracking-widest text-neutral-500 font-semibold">
-                Direct Assistance
+              <span className="text-xs uppercase tracking-widest text-[#8d1a37] font-semibold">
+                Customer Care &amp; Orders
               </span>
               <h3 className="font-serif text-2xl font-bold text-neutral-900 mt-1">
-                Studio &amp; Inquiries
+                Direct WhatsApp Support
               </h3>
               <p className="text-xs text-neutral-600 mt-1">
-                We are always happy to share extra fabric pictures, coordinate colors, and take custom orders.
+                We are always happy to share real-time fabric pictures, coordinate matching sets, and take custom orders online.
               </p>
             </div>
 
             <div className="space-y-3 text-xs">
-              <div className="flex items-start gap-3 p-3 bg-neutral-50 rounded-xl border border-neutral-100">
+              <div className="flex items-start gap-3 p-3.5 bg-neutral-50 rounded-xl border border-neutral-100">
                 <MessageCircle className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
                 <div>
-                  <h4 className="font-bold text-neutral-900">WhatsApp Support (Instant Reply)</h4>
-                  <p className="text-neutral-600">{STORE_INFO.displayPhone}</p>
+                  <h4 className="font-bold text-neutral-900">WhatsApp Orders &amp; Inquiries</h4>
+                  <p className="text-neutral-600 font-medium mt-0.5">{STORE_INFO.displayPhone}</p>
+                  <span className="text-[11px] text-emerald-700 font-semibold">Instant reply during business hours</span>
                 </div>
               </div>
 
-              <div className="flex items-start gap-3 p-3 bg-neutral-50 rounded-xl border border-neutral-100">
-                <MapPin className="w-4 h-4 text-neutral-700 shrink-0 mt-0.5" />
+              <div className="flex items-start gap-3 p-3.5 bg-neutral-50 rounded-xl border border-neutral-100">
+                <Truck className="w-4 h-4 text-[#580c22] shrink-0 mt-0.5" />
                 <div>
-                  <h4 className="font-bold text-neutral-900">Studio Location</h4>
-                  <p className="text-neutral-600">{STORE_INFO.address}, {STORE_INFO.city}</p>
+                  <h4 className="font-bold text-neutral-900">Online Pan-India Dispatch</h4>
+                  <p className="text-neutral-600 mt-0.5">Express doorstep delivery across India with live courier tracking.</p>
                 </div>
               </div>
 
-              <div className="flex items-start gap-3 p-3 bg-neutral-50 rounded-xl border border-neutral-100">
+              <div className="flex items-start gap-3 p-3.5 bg-neutral-50 rounded-xl border border-neutral-100">
                 <Clock className="w-4 h-4 text-neutral-700 shrink-0 mt-0.5" />
                 <div>
-                  <h4 className="font-bold text-neutral-900">Timings</h4>
-                  <p className="text-neutral-600">{STORE_INFO.supportHours}</p>
+                  <h4 className="font-bold text-neutral-900">Support Hours</h4>
+                  <p className="text-neutral-600 mt-0.5">{STORE_INFO.supportHours}</p>
                 </div>
               </div>
             </div>
@@ -53,9 +54,9 @@ export const ContactSection: React.FC = () => {
               href={`https://wa.me/${STORE_INFO.whatsappNumber.replace('+', '')}?text=Hi%20DJ%20Style%20Hub,%20I'd%20like%20to%20inquire%20about%20your%20dress%20materials`}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-5 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-semibold shadow-xs transition"
+              className="inline-flex items-center gap-2 px-6 py-3 bg-[#580c22] hover:bg-[#450719] text-white rounded-xl text-xs font-semibold shadow-xs transition"
             >
-              <MessageCircle className="w-4 h-4" />
+              <MessageCircle className="w-4 h-4 text-emerald-400" />
               <span>Chat with us on WhatsApp</span>
             </a>
           </div>
@@ -68,23 +69,23 @@ export const ContactSection: React.FC = () => {
 
             <div className="space-y-3 text-xs">
               <div className="p-4 bg-neutral-50 rounded-xl border border-neutral-200 space-y-1">
-                <h5 className="font-bold text-neutral-900">Are all dress materials unstitched?</h5>
+                <h5 className="font-bold text-neutral-900">Do you offer Cash on Delivery?</h5>
                 <p className="text-neutral-600 leading-relaxed">
-                  Yes, we exclusively provide unstitched materials so you can custom-stitch the exact fit, neckline, and sleeves you prefer.
+                  Yes, Cash on Delivery is available across India along with convenient UPI / Online payment options upon dispatch.
                 </p>
               </div>
 
               <div className="p-4 bg-neutral-50 rounded-xl border border-neutral-200 space-y-1">
-                <h5 className="font-bold text-neutral-900">How does WhatsApp ordering work?</h5>
+                <h5 className="font-bold text-neutral-900">How do I order directly via WhatsApp?</h5>
                 <p className="text-neutral-600 leading-relaxed">
-                  Clicking "Order on WhatsApp" prepares a pre-filled message with your selected dress materials. You can ask for more photos, confirm the order, and pay conveniently via UPI or COD.
+                  Simply click "Order on WhatsApp" on any product or from your shopping bag. A pre-filled message with product names, SKU, and prices will open for instant confirmation.
                 </p>
               </div>
 
               <div className="p-4 bg-neutral-50 rounded-xl border border-neutral-200 space-y-1">
-                <h5 className="font-bold text-neutral-900">What is the dispatch timeframe?</h5>
+                <h5 className="font-bold text-neutral-900">What is the delivery timeframe?</h5>
                 <p className="text-neutral-600 leading-relaxed">
-                  Orders are dispatched within 24–48 hours with live courier tracking shared to your WhatsApp.
+                  Orders are dispatched within 24–48 hours with live tracking links sent to your WhatsApp and SMS.
                 </p>
               </div>
             </div>

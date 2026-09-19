@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { ShoppingBag, Search, Menu, X, MessageCircle, Heart } from 'lucide-react';
+import { ShoppingBag, Search, Menu, X, MessageCircle, Heart, User, ChevronDown } from 'lucide-react';
+import { BrandLogo } from './BrandLogo';
 import { STORE_INFO } from '../data/products';
 
 interface HeaderProps {
@@ -26,212 +27,262 @@ export const Header: React.FC<HeaderProps> = ({
   const isActive = (path: string) => location.pathname === path;
 
   return (
-    <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-neutral-200">
-      {/* Minimal Top Bar */}
-      <div className="bg-neutral-900 text-neutral-300 text-xs py-1.5 px-4">
-        <div className="max-w-6xl mx-auto flex justify-between items-center">
-          <p className="tracking-wide">
-            Dress Materials for Women &amp; Kids • Verified Yardage • Delivery Across India
-          </p>
-          <a
-            href={`https://wa.me/${STORE_INFO.whatsappNumber.replace('+', '')}?text=Hi%20DJ%20Style%20Hub`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center gap-1.5 text-white hover:text-emerald-400 font-medium transition"
-          >
-            <MessageCircle className="w-3.5 h-3.5 text-emerald-400" />
-            <span>WhatsApp: {STORE_INFO.displayPhone}</span>
-          </a>
+    <header className="sticky top-0 z-40 bg-white shadow-xs border-b border-neutral-200">
+      {/* Top Maroon Announcement Bar - Exactly as reference */}
+      <div className="bg-[#580c22] text-white text-[11px] sm:text-xs py-1.5 px-4 font-normal">
+        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-1">
+          <div className="flex items-center gap-2">
+            <span>Free Shipping on Orders above ₹999</span>
+            <span className="opacity-50">|</span>
+            <span>Easy Returns</span>
+            <span className="opacity-50">|</span>
+            <span>Cash on Delivery Available</span>
+          </div>
+          <div className="flex items-center gap-3 text-neutral-200">
+            <a 
+              href={`https://wa.me/${STORE_INFO.whatsappNumber.replace('+', '')}?text=Hi%20DJ%20Style%20Hub`}
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="flex items-center gap-1 hover:text-white transition font-medium"
+            >
+              <MessageCircle className="w-3 h-3 text-emerald-400" />
+              <span>{STORE_INFO.displayPhone}</span>
+            </a>
+            <span className="opacity-50">|</span>
+            <Link to="/contact" className="hover:text-white transition">Track Order</Link>
+            <span className="opacity-50">|</span>
+            <Link to="/contact" className="hover:text-white transition">Help</Link>
+          </div>
         </div>
       </div>
 
-      {/* Main Navbar */}
-      <div className="max-w-6xl mx-auto px-4 sm:px-6">
-        <div className="flex items-center justify-between h-16 sm:h-20 gap-4">
+      {/* Main Header Bar */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6">
+        <div className="flex items-center justify-between h-20 gap-4">
           
-          {/* Mobile Menu Trigger */}
+          {/* Mobile Menu Button */}
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="md:hidden p-2 text-neutral-700 hover:text-neutral-900"
+            className="lg:hidden p-2 -ml-2 text-neutral-800 hover:text-neutral-900"
             aria-label="Toggle navigation menu"
           >
             {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
           </button>
 
-          {/* Clean Logo */}
-          <Link 
-            to="/"
-            className="cursor-pointer text-center md:text-left flex-1 md:flex-initial"
-            title="DJStyleHub - Trendy Fashion & Dress Materials"
-          >
-            <span className="font-serif text-xl sm:text-2xl font-bold tracking-tight text-neutral-900 block">
-              DJ STYLE HUB
-            </span>
-            <span className="text-[10px] tracking-widest text-neutral-500 uppercase font-medium block">
-              Dress Materials Studio
-            </span>
-          </Link>
+          {/* Logo with Emblem and Tagline */}
+          <div className="shrink-0">
+            <BrandLogo />
+          </div>
 
-          {/* Semantic Desktop Nav Links with crawlable URLs */}
-          <nav aria-label="Main Navigation" className="hidden md:flex items-center gap-6 text-sm font-medium text-neutral-600">
+          {/* Center Navigation Links - Reference Design */}
+          <nav aria-label="Main Navigation" className="hidden lg:flex items-center gap-6 text-[13px] font-medium text-neutral-700">
             <Link
               to="/"
-              className={`transition-colors ${isActive('/') ? 'text-neutral-900 font-bold' : 'hover:text-neutral-900'}`}
-              title="Shop All Dress Materials"
+              className={`py-2 transition relative ${
+                isActive('/') 
+                  ? 'text-[#580c22] font-semibold after:absolute after:bottom-0 after:left-0 after:right-0 after:h-[2px] after:bg-[#580c22]' 
+                  : 'hover:text-[#580c22]'
+              }`}
             >
-              All Materials
+              Home
             </Link>
+
             <Link
               to="/category/women"
-              className={`transition-colors ${isActive('/category/women') ? 'text-neutral-900 font-bold' : 'hover:text-neutral-900'}`}
-              title="Shop Women's Dress Materials & Suits"
+              className={`py-2 flex items-center gap-1 transition relative ${
+                isActive('/category/women') 
+                  ? 'text-[#580c22] font-semibold after:absolute after:bottom-0 after:left-0 after:right-0 after:h-[2px] after:bg-[#580c22]' 
+                  : 'hover:text-[#580c22]'
+              }`}
             >
-              Women's Collection
+              <span>Women</span>
+              <ChevronDown className="w-3.5 h-3.5 opacity-60" />
             </Link>
+
             <Link
               to="/category/kids"
-              className={`transition-colors ${isActive('/category/kids') ? 'text-neutral-900 font-bold' : 'hover:text-neutral-900'}`}
-              title="Shop Kids' Ethnic & Dress Materials"
+              className={`py-2 transition relative ${
+                isActive('/category/kids') 
+                  ? 'text-[#580c22] font-semibold after:absolute after:bottom-0 after:left-0 after:right-0 after:h-[2px] after:bg-[#580c22]' 
+                  : 'hover:text-[#580c22]'
+              }`}
             >
-              Kids' Collection
+              Kids Wear
             </Link>
+
             <Link
               to="/fabric-guide"
-              className={`transition-colors ${isActive('/fabric-guide') ? 'text-neutral-900 font-bold' : 'hover:text-neutral-900'}`}
-              title="Unstitched Fabric Yardage & Care Guide"
+              className={`py-2 transition relative ${
+                isActive('/fabric-guide') 
+                  ? 'text-[#580c22] font-semibold after:absolute after:bottom-0 after:left-0 after:right-0 after:h-[2px] after:bg-[#580c22]' 
+                  : 'hover:text-[#580c22]'
+              }`}
             >
-              Yardage Guide
+              Fabrics
             </Link>
+
             <Link
-              to="/contact"
-              className={`transition-colors ${isActive('/contact') ? 'text-neutral-900 font-bold' : 'hover:text-neutral-900'}`}
-              title="Contact DJStyleHub Support"
+              to="/category/women"
+              className="py-2 hover:text-[#580c22] transition"
             >
-              Contact
+              New Arrivals
+            </Link>
+
+            <Link
+              to="/category/women"
+              className="py-2 hover:text-[#580c22] transition text-[#8d1a37] font-semibold"
+            >
+              Offers
+            </Link>
+
+            <Link
+              to="/about"
+              className={`py-2 transition relative ${
+                isActive('/about') 
+                  ? 'text-[#580c22] font-semibold after:absolute after:bottom-0 after:left-0 after:right-0 after:h-[2px] after:bg-[#580c22]' 
+                  : 'hover:text-[#580c22]'
+              }`}
+            >
+              About
             </Link>
           </nav>
 
-          {/* Actions */}
-          <div className="flex items-center gap-2 sm:gap-3">
-            {/* Search Input */}
-            <div className="relative hidden sm:block w-44 lg:w-56">
+          {/* Search Bar - Exactly like reference */}
+          <div className="hidden md:flex flex-1 max-w-xs lg:max-w-sm mx-2">
+            <div className="relative w-full">
               <input
                 type="text"
-                placeholder="Search materials..."
+                placeholder="Search for sarees, kurtas, fabrics..."
                 value={searchQuery}
                 onChange={(e) => onSearchChange(e.target.value)}
-                aria-label="Search dress materials"
-                className="w-full bg-neutral-100 border border-neutral-200 rounded-full py-1.5 pl-8 pr-6 text-xs focus:outline-none focus:bg-white focus:border-neutral-400"
+                className="w-full bg-neutral-100 hover:bg-neutral-50 focus:bg-white border border-neutral-300 focus:border-[#580c22] rounded-full py-2 pl-9 pr-8 text-xs placeholder:text-neutral-400 focus:outline-none focus:ring-1 focus:ring-[#580c22]/20 transition"
               />
-              <Search className="w-3.5 h-3.5 text-neutral-400 absolute left-2.5 top-2.5" />
+              <Search className="w-3.5 h-3.5 text-neutral-400 absolute left-3 top-3" />
               {searchQuery && (
                 <button
                   onClick={() => onSearchChange('')}
-                  aria-label="Clear search"
-                  className="absolute right-2 top-2 text-neutral-400 hover:text-neutral-600 text-xs"
+                  className="absolute right-3 top-2.5 text-neutral-400 hover:text-neutral-600 text-xs"
                 >
                   ✕
                 </button>
               )}
             </div>
+          </div>
 
-            {/* Wishlist */}
+          {/* Right Action Icons: Profile, Wishlist, Cart, WhatsApp */}
+          <div className="flex items-center gap-1 sm:gap-2">
+            
+            {/* Direct WhatsApp Quick Chat */}
+            <a
+              href={`https://wa.me/${STORE_INFO.whatsappNumber.replace('+', '')}?text=Hi%20DJ%20Style%20Hub,%20I'm%20looking%20for%20ethnic%20wear%20and%20fabrics`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="p-2 text-emerald-600 hover:text-emerald-700 hover:bg-emerald-50 rounded-full transition"
+              title="Chat on WhatsApp"
+            >
+              <MessageCircle className="w-5 h-5 fill-emerald-600/15" />
+            </a>
+
+            {/* Profile Icon */}
+            <Link
+              to="/contact"
+              className="p-2 text-neutral-700 hover:text-[#580c22] rounded-full hover:bg-neutral-100 transition"
+              title="My Account / Help"
+            >
+              <User className="w-5 h-5" />
+            </Link>
+
+            {/* Wishlist Heart Icon */}
             <button
               onClick={onOpenWishlist}
-              className="p-2 text-neutral-600 hover:text-neutral-900 rounded-full hover:bg-neutral-100 transition relative"
-              aria-label="View saved wishlist items"
-              title="Saved items"
+              className="p-2 text-neutral-700 hover:text-[#580c22] rounded-full hover:bg-neutral-100 transition relative"
+              title="Wishlist"
+              aria-label={`Wishlist containing ${wishlistCount} items`}
             >
-              <Heart className="w-4 h-4" />
+              <Heart className="w-5 h-5" />
               {wishlistCount > 0 && (
-                <span className="absolute top-1 right-1 w-2 h-2 bg-neutral-900 rounded-full" />
+                <span className="absolute top-1 right-1 bg-[#580c22] text-white text-[10px] font-bold rounded-full w-4 h-4 flex items-center justify-center">
+                  {wishlistCount}
+                </span>
               )}
             </button>
 
-            {/* WhatsApp Quick Link */}
-            <a
-              href={`https://wa.me/${STORE_INFO.whatsappNumber.replace('+', '')}?text=Hi%20DJ%20Style%20Hub,%20I'm%20interested%20in%20dress%20materials`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hidden lg:flex items-center gap-1 px-3 py-1.5 rounded-full bg-emerald-50 text-emerald-700 hover:bg-emerald-100 border border-emerald-200 text-xs font-semibold transition"
-              title="Chat with DJStyleHub on WhatsApp"
-            >
-              <MessageCircle className="w-3.5 h-3.5" />
-              <span>WhatsApp</span>
-            </a>
-
-            {/* Bag Button */}
+            {/* Shopping Bag Icon with Badge */}
             <button
               onClick={onOpenCart}
-              className="flex items-center gap-2 bg-neutral-900 hover:bg-neutral-800 text-white px-3.5 py-1.5 sm:py-2 rounded-full text-xs font-medium transition"
+              className="p-2 text-neutral-700 hover:text-[#580c22] rounded-full hover:bg-neutral-100 transition relative"
+              title="Shopping Cart"
               aria-label={`Shopping bag containing ${cartCount} items`}
             >
-              <ShoppingBag className="w-3.5 h-3.5" />
-              <span>Bag</span>
-              {cartCount > 0 && (
-                <span className="bg-emerald-500 text-white text-[10px] font-bold px-1.5 py-0.2 rounded-full">
-                  {cartCount}
-                </span>
-              )}
+              <ShoppingBag className="w-5 h-5" />
+              <span className="absolute top-1 right-1 bg-[#580c22] text-white text-[10px] font-bold rounded-full w-4 h-4 flex items-center justify-center">
+                {cartCount}
+              </span>
             </button>
           </div>
 
         </div>
 
         {/* Mobile Search input */}
-        <div className="sm:hidden pb-3">
+        <div className="md:hidden pb-3">
           <div className="relative">
             <input
               type="text"
-              placeholder="Search cotton, chanderi, kids fabrics..."
+              placeholder="Search for sarees, kurtas, fabrics..."
               value={searchQuery}
               onChange={(e) => onSearchChange(e.target.value)}
-              aria-label="Search dress materials mobile"
-              className="w-full bg-neutral-100 border border-neutral-200 rounded-full py-2 pl-8 pr-6 text-xs focus:outline-none focus:bg-white"
+              className="w-full bg-neutral-100 border border-neutral-300 rounded-full py-2 pl-9 pr-8 text-xs focus:outline-none focus:bg-white"
             />
-            <Search className="w-3.5 h-3.5 text-neutral-400 absolute left-2.5 top-2.5" />
+            <Search className="w-3.5 h-3.5 text-neutral-400 absolute left-3 top-3" />
           </div>
         </div>
       </div>
 
       {/* Mobile Drawer Menu */}
       {mobileMenuOpen && (
-        <div className="md:hidden border-t border-neutral-200 bg-white px-6 py-5 space-y-4">
-          <nav aria-label="Mobile Navigation" className="space-y-2">
+        <div className="lg:hidden border-t border-neutral-200 bg-white px-6 py-5 space-y-4">
+          <nav className="space-y-2 text-sm font-medium">
             <Link
               to="/"
               onClick={() => setMobileMenuOpen(false)}
-              className={`block w-full text-left py-2 text-sm font-semibold ${isActive('/') ? 'text-neutral-900' : 'text-neutral-600'}`}
+              className={`block py-2 ${isActive('/') ? 'text-[#580c22] font-bold' : 'text-neutral-700'}`}
             >
-              All Dress Materials
+              Home
             </Link>
             <Link
               to="/category/women"
               onClick={() => setMobileMenuOpen(false)}
-              className={`block w-full text-left py-2 text-sm font-semibold ${isActive('/category/women') ? 'text-neutral-900' : 'text-neutral-600'}`}
+              className={`block py-2 ${isActive('/category/women') ? 'text-[#580c22] font-bold' : 'text-neutral-700'}`}
             >
-              Women's Collection
+              Women's Ethnic &amp; Dresses
             </Link>
             <Link
               to="/category/kids"
               onClick={() => setMobileMenuOpen(false)}
-              className={`block w-full text-left py-2 text-sm font-semibold ${isActive('/category/kids') ? 'text-neutral-900' : 'text-neutral-600'}`}
+              className={`block py-2 ${isActive('/category/kids') ? 'text-[#580c22] font-bold' : 'text-neutral-700'}`}
             >
               Kids' Collection
             </Link>
             <Link
               to="/fabric-guide"
               onClick={() => setMobileMenuOpen(false)}
-              className="block w-full text-left py-2 text-sm text-neutral-600"
+              className="block py-2 text-neutral-700"
             >
-              Yardage &amp; Fabric Guide
+              Fabrics &amp; Yardage Guide
+            </Link>
+            <Link
+              to="/about"
+              onClick={() => setMobileMenuOpen(false)}
+              className="block py-2 text-neutral-700"
+            >
+              About DJ Style Hub
             </Link>
             <Link
               to="/contact"
               onClick={() => setMobileMenuOpen(false)}
-              className="block w-full text-left py-2 text-sm text-neutral-600"
+              className="block py-2 text-neutral-700"
             >
-              Store &amp; Contact
+              Contact &amp; Help
             </Link>
           </nav>
 
@@ -240,10 +291,10 @@ export const Header: React.FC<HeaderProps> = ({
               href={`https://wa.me/${STORE_INFO.whatsappNumber.replace('+', '')}?text=Hi%20DJ%20Style%20Hub`}
               target="_blank"
               rel="noopener noreferrer"
-              className="w-full py-2.5 bg-emerald-600 text-white rounded-xl text-xs font-semibold flex items-center justify-center gap-2"
+              className="w-full py-2.5 bg-[#580c22] hover:bg-[#450719] text-white rounded-xl text-xs font-semibold flex items-center justify-center gap-2"
             >
               <MessageCircle className="w-4 h-4" />
-              <span>Direct WhatsApp Chat</span>
+              <span>WhatsApp Direct Orders</span>
             </a>
           </div>
         </div>

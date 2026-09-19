@@ -1,92 +1,92 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Scissors, ShieldCheck, MessageCircle } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 
-interface HeroProps {
-  currentCategory?: 'all' | 'women' | 'kids';
-}
-
-export const Hero: React.FC<HeroProps> = ({ currentCategory = 'all' }) => {
+export const Hero: React.FC = () => {
   return (
-    <section className="bg-white border-b border-neutral-200 py-12 sm:py-16">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 text-center space-y-6">
-        
-        {/* Semantic Eyebrow */}
-        <span className="text-xs font-semibold uppercase tracking-widest text-neutral-500">
-          Exclusive Unstitched Studio
-        </span>
+    <section className="relative overflow-hidden bg-[#faf3ee] border-b border-neutral-200/80">
+      {/* Background Decorative Floral Accents */}
+      <div className="absolute top-0 right-0 w-96 h-96 opacity-10 pointer-events-none">
+        <svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M40 160C80 120 120 80 160 40M160 40C140 80 100 120 40 160M160 40C120 40 80 80 40 160" stroke="#580c22" strokeWidth="2" strokeLinecap="round"/>
+        </svg>
+      </div>
 
-        {/* Primary Page H1 */}
-        <h1 className="font-serif text-3xl sm:text-5xl font-bold tracking-tight text-neutral-900 leading-tight">
-          Curated Dress Materials <br className="hidden sm:inline" />
-          for Women &amp; Kids
-        </h1>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 lg:py-16">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+          
+          {/* Left Hero Content */}
+          <div className="lg:col-span-6 space-y-6 text-center lg:text-left z-10">
+            {/* Tagline */}
+            <div className="inline-block">
+              <span className="text-xs sm:text-[13px] font-semibold tracking-[0.25em] uppercase text-[#8d1a37]">
+                TRADITION MEETS TREND
+              </span>
+            </div>
 
-        {/* Descriptive Subtitle */}
-        <p className="text-sm sm:text-base text-neutral-600 max-w-xl mx-auto leading-relaxed">
-          Pure breathable cottons, Chanderi silks, and gentle kid-friendly fabrics. Handpicked with verified yardage for flawless tailoring with delivery across India.
-        </p>
+            {/* Main Headline */}
+            <h1 className="font-serif text-4xl sm:text-6xl lg:text-7xl font-bold text-neutral-900 tracking-tight leading-[1.1]">
+              Wear <br className="hidden sm:inline" />
+              Your Story
+            </h1>
 
-        {/* Crawlable Category Links */}
-        <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
-          <Link
-            to="/category/women"
-            className={`px-6 py-2.5 rounded-full text-xs sm:text-sm font-semibold transition ${
-              currentCategory === 'women'
-                ? 'bg-neutral-900 text-white shadow-sm'
-                : 'bg-neutral-100 text-neutral-700 hover:bg-neutral-200'
-            }`}
-            title="Explore Women's Dress Materials"
-          >
-            👗 Women's Materials
-          </Link>
-          <Link
-            to="/category/kids"
-            className={`px-6 py-2.5 rounded-full text-xs sm:text-sm font-semibold transition ${
-              currentCategory === 'kids'
-                ? 'bg-neutral-900 text-white shadow-sm'
-                : 'bg-neutral-100 text-neutral-700 hover:bg-neutral-200'
-            }`}
-            title="Explore Kids' Ethnic Dress Materials"
-          >
-            🧸 Kids' Materials
-          </Link>
-          <Link
-            to="/"
-            className={`px-5 py-2.5 rounded-full text-xs sm:text-sm font-medium transition ${
-              currentCategory === 'all'
-                ? 'text-neutral-900 font-bold underline underline-offset-4'
-                : 'text-neutral-500 hover:text-neutral-900'
-            }`}
-            title="View All Dress Materials"
-          >
-            View All
-          </Link>
+            {/* Subtitle */}
+            <p className="text-sm sm:text-base text-neutral-600 max-w-lg mx-auto lg:mx-0 leading-relaxed font-normal">
+              Explore timeless ethnic wear, modern styles and premium fabrics — all at one place.
+            </p>
+
+            {/* Shop Now CTA Button */}
+            <div className="pt-2">
+              <Link
+                to="/category/women"
+                className="inline-flex items-center gap-2 bg-[#580c22] hover:bg-[#450719] text-white px-8 py-3.5 rounded-lg text-sm font-semibold transition-all duration-200 shadow-sm hover:shadow-md group"
+              >
+                <span>Shop Now</span>
+                <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+              </Link>
+            </div>
+
+            {/* Slider Dots */}
+            <div className="flex items-center justify-center lg:justify-start gap-2 pt-4">
+              <span className="w-6 h-2 rounded-full bg-[#580c22]" />
+              <span className="w-2 h-2 rounded-full bg-neutral-300" />
+              <span className="w-2 h-2 rounded-full bg-neutral-300" />
+            </div>
+          </div>
+
+          {/* Right Hero Visuals with Model & Calligraphy */}
+          <div className="lg:col-span-6 relative flex items-center justify-center">
+            
+            {/* Model Image with arched container */}
+            <div className="relative z-10 w-full max-w-md lg:max-w-lg aspect-[4/5] rounded-t-[140px] sm:rounded-t-[180px] rounded-b-2xl overflow-hidden shadow-xl border-4 border-white">
+              <img
+                src="https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=1000&q=85"
+                alt="Indian Model in Maroon Silk Saree with Traditional Gajra and Jewelry"
+                width={800}
+                height={1000}
+                fetchPriority="high"
+                decoding="async"
+                className="w-full h-full object-cover object-top"
+              />
+              
+              {/* Subtle Gradient overlay at bottom */}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent pointer-events-none" />
+            </div>
+
+            {/* Artistic Handscript Calligraphy on Right - Exactly as in reference */}
+            <div className="hidden sm:flex flex-col items-center absolute -right-2 top-1/4 z-20 pointer-events-none bg-white/80 backdrop-blur-xs p-4 rounded-2xl border border-rose-100 shadow-lg transform rotate-2">
+              <span className="font-cursive text-3xl sm:text-4xl text-[#580c22] leading-tight text-center font-bold">
+                More than Fashion<br />
+                <span className="text-[#8d1a37]">It's You ♡</span>
+              </span>
+              <svg className="w-8 h-8 text-amber-600/40 mt-1" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>
+              </svg>
+            </div>
+
+          </div>
+
         </div>
-
-        {/* Value Propositions */}
-        <div className="pt-6 flex flex-wrap justify-center items-center gap-6 text-xs text-neutral-500 border-t border-neutral-100">
-          <span className="flex items-center gap-1.5">
-            <Scissors className="w-3.5 h-3.5 text-neutral-700" />
-            <span>Exact 2.5m Top Cuts</span>
-          </span>
-          <span className="text-neutral-300">•</span>
-          <span className="flex items-center gap-1.5">
-            <ShieldCheck className="w-3.5 h-3.5 text-neutral-700" />
-            <span>100% Genuine Fabrics</span>
-          </span>
-          <span className="text-neutral-300">•</span>
-          <a
-            href="https://wa.me/919876543210?text=Hi%20DJ%20Style%20Hub"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center gap-1.5 text-emerald-700 font-medium hover:underline"
-          >
-            <MessageCircle className="w-3.5 h-3.5 text-emerald-600" />
-            <span>Instant WhatsApp Ordering</span>
-          </a>
-        </div>
-
       </div>
     </section>
   );
