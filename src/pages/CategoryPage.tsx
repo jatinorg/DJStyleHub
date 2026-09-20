@@ -28,9 +28,10 @@ export const CategoryPage: React.FC<CategoryPageProps> = ({
   const [sortBy, setSortBy] = useState<'featured' | 'price-low' | 'price-high' | 'rating'>('featured');
 
   const categoryProducts = useMemo(() => {
-    if (!activeCategory || activeCategory === 'all') return products;
+    const liveProducts = products.filter((p) => p.published !== false && p.name.trim() !== '' && p.price > 0);
+    if (!activeCategory || activeCategory === 'all') return liveProducts;
     const target = activeCategory.toLowerCase();
-    return products.filter((p) => {
+    return liveProducts.filter((p) => {
       const cat = p.category.toLowerCase();
       const sub = p.subcategory.toLowerCase();
       if (target === 'sarees' || target === 'saree') return cat === 'sarees' || cat === 'women' || sub.includes('saree');

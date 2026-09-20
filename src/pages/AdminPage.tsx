@@ -36,7 +36,10 @@ import {
   Upload,
   ImagePlus,
   Pencil,
-  Minus
+  Minus,
+  Globe,
+  Eye,
+  EyeOff
 } from 'lucide-react';
 import { collection, getDocs } from 'firebase/firestore';
 import { db } from '../firebase/config';
@@ -239,6 +242,7 @@ export const AdminPage: React.FC = () => {
       images: [],
       badge: 'New Arrival',
       inStock: true,
+      published: false, // Default: Draft mode (Hidden from storefront until toggled live)
       sku: uniqueSku,
       color: ''
     };
@@ -821,13 +825,18 @@ export const AdminPage: React.FC = () => {
                                 <h5 className="text-xs font-bold text-neutral-900 truncate">
                                   {p.name.trim() !== '' ? p.name : `Untitled Product (${p.id})`}
                                 </h5>
-                                <div className="flex items-center justify-between text-[10px] mt-0.5">
+                                <div className="flex items-center justify-between text-[10px] mt-0.5 gap-1">
                                   <span className="text-[#580c22] font-bold">
                                     {p.price > 0 ? `₹${p.price.toLocaleString('en-IN')}` : 'Price Pending'}
                                   </span>
-                                  <span className={p.inStock ? 'text-emerald-700 font-medium' : 'text-red-600'}>
-                                    {p.inStock ? 'In Stock' : 'Out of Stock'}
-                                  </span>
+                                  <div className="flex items-center gap-1">
+                                    <span className={p.published !== false ? 'text-emerald-700 bg-emerald-50 px-1 py-0.5 rounded font-semibold' : 'text-amber-700 bg-amber-50 px-1 py-0.5 rounded font-semibold'}>
+                                      {p.published !== false ? 'Live' : 'Draft'}
+                                    </span>
+                                    <span className={p.inStock ? 'text-emerald-700 font-medium' : 'text-red-600 font-medium'}>
+                                      {p.inStock ? 'In Stock' : 'Out'}
+                                    </span>
+                                  </div>
                                 </div>
                               </div>
                             </div>
@@ -897,7 +906,7 @@ export const AdminPage: React.FC = () => {
                       </div>
 
                       {/* Top Row Inputs */}
-                      <div className="grid grid-cols-1 sm:grid-cols-4 gap-3">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
                         <div>
                           <label className="text-[10px] font-bold text-neutral-500 uppercase tracking-wider block mb-1">
                             Product Category
@@ -947,19 +956,37 @@ export const AdminPage: React.FC = () => {
 
                         <div>
                           <label className="text-[10px] font-bold text-neutral-500 uppercase tracking-wider block mb-1">
-                            Status (Stock Availability)
+                            Store Visibility
+                          </label>
+                          <button
+                            type="button"
+                            onClick={() => setFormData({ ...formData, published: formData.published === false ? true : false })}
+                            className={`w-full py-2 px-2.5 rounded-xl border text-[11px] font-bold flex items-center justify-center gap-1 transition ${
+                              formData.published !== false
+                                ? 'bg-emerald-50 border-emerald-300 text-emerald-800'
+                                : 'bg-amber-50 border-amber-300 text-amber-800'
+                            }`}
+                          >
+                            {formData.published !== false ? <Eye className="w-3.5 h-3.5 text-emerald-600 shrink-0" /> : <EyeOff className="w-3.5 h-3.5 text-amber-600 shrink-0" />}
+                            <span>{formData.published !== false ? 'Live on Store' : 'Draft (Hidden)'}</span>
+                          </button>
+                        </div>
+
+                        <div>
+                          <label className="text-[10px] font-bold text-neutral-500 uppercase tracking-wider block mb-1">
+                            Stock Status
                           </label>
                           <button
                             type="button"
                             onClick={() => setFormData({ ...formData, inStock: !formData.inStock })}
-                            className={`w-full py-2 px-3 rounded-xl border text-xs font-bold flex items-center justify-center gap-1.5 transition ${
+                            className={`w-full py-2 px-2.5 rounded-xl border text-[11px] font-bold flex items-center justify-center gap-1 transition ${
                               formData.inStock
                                 ? 'bg-emerald-50 border-emerald-300 text-emerald-800'
                                 : 'bg-red-50 border-red-300 text-red-700'
                             }`}
                           >
-                            <Unlock className="w-3.5 h-3.5" />
-                            <span>{formData.inStock ? 'Unlocked (In Stock)' : 'Locked (Out of Stock)'}</span>
+                            <Unlock className="w-3.5 h-3.5 shrink-0" />
+                            <span>{formData.inStock ? 'In Stock' : 'Out of Stock'}</span>
                           </button>
                         </div>
                       </div>

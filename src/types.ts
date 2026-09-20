@@ -22,6 +22,7 @@ export interface Product {
   images: string[];
   badge?: string;
   inStock: boolean;
+  published?: boolean;
   sku: string;
   color: string;
   ageGroup?: string;

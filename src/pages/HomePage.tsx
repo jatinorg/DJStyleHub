@@ -37,6 +37,8 @@ export const HomePage: React.FC<HomePageProps> = ({
 
   const filteredProducts = useMemo(() => {
     return products.filter((product) => {
+      // Hide Draft products & incomplete items from storefront
+      if (product.published === false || !product.name.trim() || product.price <= 0) return false;
       if (selectedFabric !== 'all' && product.fabric !== selectedFabric) return false;
       if (searchQuery.trim() !== '') {
         const q = searchQuery.toLowerCase();

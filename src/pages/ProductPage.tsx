@@ -41,11 +41,11 @@ export const ProductPage: React.FC<ProductPageProps> = ({
   const relatedProducts = useMemo(() => {
     if (!product) return [];
     return products
-      .filter((p) => p.id !== product.id && (p.category === product.category || p.subcategory === product.subcategory))
+      .filter((p) => p.published !== false && p.name.trim() !== '' && p.price > 0 && p.id !== product.id && (p.category === product.category || p.subcategory === product.subcategory))
       .slice(0, 4);
   }, [products, product]);
 
-  if (!product) {
+  if (!product || product.published === false || !product.name.trim() || product.price <= 0) {
     return <Navigate to="/404" replace />;
   }
 
