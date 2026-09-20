@@ -1,6 +1,6 @@
 import React from 'react';
 import { Star, ShieldCheck, Quote, ThumbsUp } from 'lucide-react';
-import { REVIEWS } from '../data/products';
+import { REVIEWS, STORE_INFO } from '../data/products';
 
 export const Testimonials: React.FC = () => {
   return (
@@ -68,7 +68,7 @@ export const Testimonials: React.FC = () => {
             </p>
           </div>
           <a
-            href="https://wa.me/919876543210?text=Hi%20DJ%20Style%20Hub,%20I'm%20looking%20for%20matching%20mother-daughter%20or%20family%20sets"
+            href={`https://wa.me/${STORE_INFO.whatsappNumber.replace('+', '')}?text=Hi%20DJ%20Style%20Hub,%20I'm%20looking%20for%20matching%20mother-daughter%20or%20family%20sets`}
             target="_blank"
             rel="noopener noreferrer"
             className="shrink-0 bg-emerald-500 hover:bg-emerald-600 text-white px-6 py-3 rounded-full text-xs sm:text-sm font-bold shadow-md transition transform active:scale-95"

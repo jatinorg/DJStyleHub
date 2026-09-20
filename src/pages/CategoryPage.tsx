@@ -4,14 +4,14 @@ import { RotateCcw, SlidersHorizontal, Scissors } from 'lucide-react';
 import { SEO } from '../components/SEO';
 import { Breadcrumbs } from '../components/Breadcrumbs';
 import { ProductCard } from '../components/ProductCard';
-import { PRODUCTS } from '../data/products';
+import { useProducts } from '../context/ProductContext';
 import { Product } from '../types';
 
 interface CategoryPageProps {
   onAddToCart: (product: Product) => void;
   wishlist: Product[];
   onToggleWishlist: (product: Product) => void;
-  overrideCategory?: 'women' | 'kids';
+  overrideCategory?: string;
 }
 
 export const CategoryPage: React.FC<CategoryPageProps> = ({
@@ -20,19 +20,29 @@ export const CategoryPage: React.FC<CategoryPageProps> = ({
   onToggleWishlist,
   overrideCategory,
 }) => {
+  const { products } = useProducts();
   const { categorySlug } = useParams<{ categorySlug?: string }>();
-  const activeCategory = overrideCategory || (categorySlug?.toLowerCase() === 'kids' ? 'kids' : categorySlug?.toLowerCase() === 'women' ? 'women' : null);
-
-  if (!activeCategory) {
-    return <Navigate to="/" replace />;
-  }
+  const activeCategory = overrideCategory || categorySlug?.toLowerCase() || 'all';
 
   const [selectedFabric, setSelectedFabric] = useState<string>('all');
   const [sortBy, setSortBy] = useState<'featured' | 'price-low' | 'price-high' | 'rating'>('featured');
 
   const categoryProducts = useMemo(() => {
-    return PRODUCTS.filter((p) => p.category === activeCategory);
-  }, [activeCategory]);
+    if (!activeCategory || activeCategory === 'all') return products;
+    const target = activeCategory.toLowerCase();
+    return products.filter((p) => {
+      const cat = p.category.toLowerCase();
+      const sub = p.subcategory.toLowerCase();
+      if (target === 'sarees' || target === 'saree') return cat === 'sarees' || cat === 'women' || sub.includes('saree');
+      if (target === 'kurti' || target === 'kurtis' || target === 'kurti-sets') return sub.includes('kurti') || sub.includes('suit');
+      if (target === 'fabrics' || target === 'fabric') return cat === 'fabrics' || sub.includes('fabric');
+      if (target === 'nightwear' || target === 'nighties') return cat === 'nightwear' || sub.includes('night') || sub.includes('kaftan');
+      if (target === 'kids') return cat === 'kids' || sub.includes('kid');
+      if (target === 'accessories') return cat === 'accessories' || sub.includes('accessori') || sub.includes('jhumka');
+      if (target === 'home-living' || target === 'home') return cat === 'home-living' || sub.includes('home');
+      return cat === target || sub.includes(target);
+    });
+  }, [products, activeCategory]);
 
   const availableFabrics = useMemo(() => {
     return ['all', ...Array.from(new Set(categoryProducts.map((p) => p.fabric)))];
@@ -52,24 +62,20 @@ export const CategoryPage: React.FC<CategoryPageProps> = ({
       });
   }, [categoryProducts, selectedFabric, sortBy]);
 
-  const isWomen = activeCategory === 'women';
-  const pageTitle = isWomen
-    ? "Women's Dresses Online | DJStyleHub"
-    : "Kids' Clothing & Dress Materials Online | DJStyleHub";
-  const pageDescription = isWomen
-    ? "Shop premium unstitched dress materials for women at DJStyleHub. Pure Jaipuri mulmul cotton, Chanderi silks, Chikankari georgette, and festive suits with delivery across India."
-    : "Discover gentle unstitched dress materials for kids at DJStyleHub. Itch-free festive kurta fabrics, soft cottons, and lehenga materials for boys and girls.";
+  const isWomen = activeCategory === 'women' || activeCategory === 'sarees' || activeCategory === 'kurti';
+  const pageTitle = `${activeCategory.toUpperCase()} Collection Online | DJStyleHub`;
+  const pageDescription = `Shop premium ${activeCategory} ethnic collections and dress materials online at DJStyleHub with pan-India delivery.`;
   const canonicalUrl = `https://djstylehub.com/category/${activeCategory}`;
 
   // Breadcrumbs
   const breadcrumbs = [
     {
-      name: isWomen ? "Women's Dresses" : "Kids' Clothing",
+      name: `${activeCategory.charAt(0).toUpperCase()}${activeCategory.slice(1)}`,
       url: `/category/${activeCategory}`
     }
   ];
 
-  // Schema: BreadcrumbList + ItemList
+  // Global SEO Schema
   const categorySchema = [
     {
       '@context': 'https://schema.org',
@@ -84,7 +90,7 @@ export const CategoryPage: React.FC<CategoryPageProps> = ({
         {
           '@type': 'ListItem',
           position: 2,
-          name: isWomen ? "Women's Dresses" : "Kids' Clothing",
+          name: activeCategory.toUpperCase(),
           item: canonicalUrl
         }
       ]
@@ -120,42 +126,50 @@ export const CategoryPage: React.FC<CategoryPageProps> = ({
 
       {/* Category Header with Single H1 */}
       <header className="py-6 border-b border-neutral-200">
-        <h1 className="font-serif text-3xl sm:text-4xl font-bold text-neutral-900">
-          {isWomen ? "Women's Unstitched Dress Materials" : "Kids' Ethnic Dress Materials"}
+        <h1 className="font-serif text-3xl sm:text-4xl font-bold text-neutral-900 capitalize">
+          {activeCategory} Collection
         </h1>
         <p className="text-sm text-neutral-600 max-w-3xl mt-2 leading-relaxed">
-          {isWomen
-            ? "Explore our curated collection of women's dress materials crafted from pure mulmul cottons, luxurious Chanderi silks, and embroidered georgettes. Every set comes with exact 2.50m top cuts for seamless custom tailoring."
-            : "Handpicked festive fabrics and daily cotton sets designed specifically for children. Woven with itch-free inner linings, soft skin barriers, and AZO-free hypoallergenic dyes for ages 2 to 12."}
+          Explore our handpicked selection of {activeCategory} dress materials and ethnic wear crafted with premium fabrics and authentic weaves.
         </p>
 
         {/* Category Navigation Pills */}
-        <div className="flex items-center gap-2 mt-4">
+        <div className="flex items-center gap-2 mt-4 flex-wrap">
           <Link
-            to="/"
+            to="/category/all"
             className="px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-neutral-100 text-neutral-700 hover:bg-neutral-200 transition"
           >
-            All Materials ({PRODUCTS.length})
+            All Materials ({products.length})
           </Link>
           <Link
-            to="/category/women"
+            to="/category/sarees"
             className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold transition ${
-              isWomen
-                ? 'bg-neutral-900 text-white'
+              activeCategory === 'sarees'
+                ? 'bg-[#580c22] text-white'
                 : 'bg-neutral-100 text-neutral-700 hover:bg-neutral-200'
             }`}
           >
-            Women's Collection ({PRODUCTS.filter(p => p.category === 'women').length})
+            Sarees ({products.filter(p => p.subcategory.toLowerCase().includes('saree') || p.category === 'sarees').length})
+          </Link>
+          <Link
+            to="/category/kurti"
+            className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold transition ${
+              activeCategory === 'kurti'
+                ? 'bg-[#580c22] text-white'
+                : 'bg-neutral-100 text-neutral-700 hover:bg-neutral-200'
+            }`}
+          >
+            Kurti &amp; Sets ({products.filter(p => p.subcategory.toLowerCase().includes('kurti') || p.subcategory.toLowerCase().includes('suit')).length})
           </Link>
           <Link
             to="/category/kids"
             className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold transition ${
-              !isWomen
-                ? 'bg-neutral-900 text-white'
+              activeCategory === 'kids'
+                ? 'bg-[#580c22] text-white'
                 : 'bg-neutral-100 text-neutral-700 hover:bg-neutral-200'
             }`}
           >
-            Kids' Collection ({PRODUCTS.filter(p => p.category === 'kids').length})
+            Kids' Collection ({products.filter(p => p.category === 'kids' || p.subcategory.toLowerCase().includes('kid')).length})
           </Link>
         </div>
       </header>
@@ -218,9 +232,9 @@ export const CategoryPage: React.FC<CategoryPageProps> = ({
             <h2 className="font-serif font-bold text-neutral-900">No dress materials found for this filter</h2>
             <button
               onClick={() => setSelectedFabric('all')}
-              className="px-4 py-2 bg-neutral-900 text-white text-xs rounded-lg"
+              className="px-4 py-2 bg-[#580c22] text-white text-xs rounded-lg"
             >
-              Show All {isWomen ? "Women's" : "Kids'"} Materials
+              Show All Materials
             </button>
           </div>
         ) : (

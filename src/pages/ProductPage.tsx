@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { useParams, Link, Navigate } from 'react-router-dom';
 import { 
   Heart, 
@@ -15,7 +15,8 @@ import {
 import { SEO } from '../components/SEO';
 import { Breadcrumbs } from '../components/Breadcrumbs';
 import { ProductCard } from '../components/ProductCard';
-import { getProductBySlugOrId, getRelatedProducts, STORE_INFO } from '../data/products';
+import { STORE_INFO } from '../data/products';
+import { useProducts } from '../context/ProductContext';
 import { Product } from '../types';
 
 interface ProductPageProps {
@@ -30,18 +31,25 @@ export const ProductPage: React.FC<ProductPageProps> = ({
   onToggleWishlist,
 }) => {
   const { slug } = useParams<{ slug: string }>();
+  const { getProductBySlugOrId, products } = useProducts();
   const product = slug ? getProductBySlugOrId(slug) : undefined;
 
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [quantity, setQuantity] = useState(1);
   const [added, setAdded] = useState(false);
 
+  const relatedProducts = useMemo(() => {
+    if (!product) return [];
+    return products
+      .filter((p) => p.id !== product.id && (p.category === product.category || p.subcategory === product.subcategory))
+      .slice(0, 4);
+  }, [products, product]);
+
   if (!product) {
     return <Navigate to="/404" replace />;
   }
 
   const isWishlisted = wishlist.some((p) => p.id === product.id);
-  const relatedProducts = getRelatedProducts(product.id, 4);
 
   const discountPercent = Math.round(
     ((product.originalPrice - product.price) / product.originalPrice) * 100
@@ -267,11 +275,17 @@ Please confirm availability and share payment/delivery options!`;
               {product.name}
             </h1>
 
-            {/* SKU and Color */}
-            <div className="flex items-center gap-4 text-xs text-neutral-500">
+            {/* SKU, Color & Age Group */}
+            <div className="flex items-center gap-4 text-xs text-neutral-500 flex-wrap">
               <span>SKU: <strong className="text-neutral-800">{product.sku}</strong></span>
               <span>•</span>
               <span>Color: <strong className="text-neutral-800">{product.color}</strong></span>
+              {product.ageGroup && (
+                <>
+                  <span>•</span>
+                  <span>Age / Size: <strong className="text-purple-900 font-bold">{product.ageGroup}</strong></span>
+                </>
+              )}
               <span>•</span>
               <span className="text-emerald-700 font-semibold">✓ In Stock</span>
             </div>
@@ -294,21 +308,32 @@ Please confirm availability and share payment/delivery options!`;
             <section aria-labelledby="yardage-heading" className="bg-neutral-50 rounded-xl p-4 border border-neutral-200 space-y-2">
               <div className="flex items-center gap-2 font-bold text-xs text-neutral-900 uppercase tracking-wider">
                 <Scissors className="w-4 h-4 text-neutral-700" />
-                <h2 id="yardage-heading" className="text-xs font-bold">Verified Cut Yardage Specifications</h2>
+                <h2 id="yardage-heading" className="text-xs font-bold">{product.specificationsTitle || 'Verified Cut Yardage Specifications'}</h2>
               </div>
               <div className="text-xs space-y-1.5 pt-1 text-neutral-700">
-                <div className="flex justify-between border-b border-neutral-200 pb-1">
-                  <span className="font-medium">Top / Kurta:</span>
-                  <span className="font-bold text-neutral-900">{product.topCut}</span>
-                </div>
-                <div className="flex justify-between border-b border-neutral-200 pb-1">
-                  <span className="font-medium">Bottom / Salwar:</span>
-                  <span className="font-bold text-neutral-900">{product.bottomCut}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="font-medium">Dupatta / Stole:</span>
-                  <span className="font-bold text-neutral-900">{product.dupattaCut}</span>
-                </div>
+                {product.specifications && product.specifications.length > 0 ? (
+                  product.specifications.map((spec, idx) => (
+                    <div key={spec.id || idx} className={`flex justify-between ${idx < product.specifications!.length - 1 ? 'border-b border-neutral-200 pb-1' : ''}`}>
+                      <span className="font-medium">{spec.label}:</span>
+                      <span className="font-bold text-neutral-900">{spec.value || 'N/A'}</span>
+                    </div>
+                  ))
+                ) : (
+                  <>
+                    <div className="flex justify-between border-b border-neutral-200 pb-1">
+                      <span className="font-medium">Top / Kurta:</span>
+                      <span className="font-bold text-neutral-900">{product.topCut}</span>
+                    </div>
+                    <div className="flex justify-between border-b border-neutral-200 pb-1">
+                      <span className="font-medium">Bottom / Salwar:</span>
+                      <span className="font-bold text-neutral-900">{product.bottomCut}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="font-medium">Dupatta / Stole:</span>
+                      <span className="font-bold text-neutral-900">{product.dupattaCut}</span>
+                    </div>
+                  </>
+                )}
               </div>
             </section>
 

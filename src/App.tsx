@@ -12,8 +12,14 @@ import { CategoryPage } from './pages/CategoryPage';
 import { ProductPage } from './pages/ProductPage';
 import { AboutPage } from './pages/AboutPage';
 import { ContactPage } from './pages/ContactPage';
+import { LoginPage } from './pages/LoginPage';
+import { RegisterPage } from './pages/RegisterPage';
+import { AdminPage } from './pages/AdminPage';
 import { FabricGuidePage } from './pages/FabricGuidePage';
 import { NotFoundPage } from './pages/NotFoundPage';
+
+import { AuthProvider } from './context/AuthContext';
+import { ProductProvider } from './context/ProductContext';
 
 import { STORE_INFO } from './data/products';
 import { Product, CartItem } from './types';
@@ -191,6 +197,9 @@ export function AppContent() {
           <Route path="/fabric-guide" element={<FabricGuidePage />} />
           <Route path="/about" element={<AboutPage />} />
           <Route path="/contact" element={<ContactPage />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/register" element={<RegisterPage />} />
+          <Route path="/admin" element={<AdminPage />} />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </div>
@@ -237,7 +246,11 @@ export function AppContent() {
 export function App() {
   return (
     <BrowserRouter>
-      <AppContent />
+      <AuthProvider>
+        <ProductProvider>
+          <AppContent />
+        </ProductProvider>
+      </AuthProvider>
     </BrowserRouter>
   );
 }

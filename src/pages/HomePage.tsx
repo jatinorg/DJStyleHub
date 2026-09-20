@@ -8,7 +8,8 @@ import { PromoBanners } from '../components/PromoBanners';
 import { TrustBar } from '../components/TrustBar';
 import { MiddleBanner } from '../components/MiddleBanner';
 import { ProductCard } from '../components/ProductCard';
-import { PRODUCTS, STORE_INFO } from '../data/products';
+import { STORE_INFO } from '../data/products';
+import { useProducts } from '../context/ProductContext';
 import { Product } from '../types';
 
 interface HomePageProps {
@@ -26,15 +27,16 @@ export const HomePage: React.FC<HomePageProps> = ({
   searchQuery,
   onSearchChange,
 }) => {
+  const { products } = useProducts();
   const [selectedFabric, setSelectedFabric] = useState<string>('all');
   const [sortBy, setSortBy] = useState<'featured' | 'price-low' | 'price-high' | 'rating'>('featured');
 
   const availableFabrics = useMemo(() => {
-    return ['all', ...Array.from(new Set(PRODUCTS.map(p => p.fabric)))];
-  }, []);
+    return ['all', ...Array.from(new Set(products.map(p => p.fabric)))];
+  }, [products]);
 
   const filteredProducts = useMemo(() => {
-    return PRODUCTS.filter((product) => {
+    return products.filter((product) => {
       if (selectedFabric !== 'all' && product.fabric !== selectedFabric) return false;
       if (searchQuery.trim() !== '') {
         const q = searchQuery.toLowerCase();
@@ -52,7 +54,7 @@ export const HomePage: React.FC<HomePageProps> = ({
       if (sortBy === 'rating') return b.rating - a.rating;
       return 0;
     });
-  }, [selectedFabric, searchQuery, sortBy]);
+  }, [products, selectedFabric, searchQuery, sortBy]);
 
   // Global SEO Schema: Organization & WebSite (Strictly without physical shop address)
   const homeSchema = [

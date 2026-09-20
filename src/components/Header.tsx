@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { ShoppingBag, Search, Menu, X, MessageCircle, Heart, User, ChevronDown } from 'lucide-react';
+import { ShoppingBag, Search, Menu, X, MessageCircle, Heart, User, ChevronDown, ShieldCheck } from 'lucide-react';
 import { BrandLogo } from './BrandLogo';
 import { STORE_INFO } from '../data/products';
+import { useAuth } from '../context/AuthContext';
 
 interface HeaderProps {
   searchQuery: string;
@@ -23,6 +24,7 @@ export const Header: React.FC<HeaderProps> = ({
 }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const location = useLocation();
+  const { userProfile } = useAuth();
 
   const isActive = (path: string) => location.pathname === path;
 
@@ -169,25 +171,38 @@ export const Header: React.FC<HeaderProps> = ({
             </div>
           </div>
 
-          {/* Right Action Icons: Profile, Wishlist, Cart, WhatsApp */}
+          {/* Right Action Icons: Message Contact, Login Account, Wishlist, Cart */}
           <div className="flex items-center gap-1 sm:gap-2">
             
-            {/* Direct WhatsApp Quick Chat */}
-            <a
-              href={`https://wa.me/${STORE_INFO.whatsappNumber.replace('+', '')}?text=Hi%20DJ%20Style%20Hub,%20I'm%20looking%20for%20ethnic%20wear%20and%20fabrics`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="p-2 text-emerald-600 hover:text-emerald-700 hover:bg-emerald-50 rounded-full transition"
-              title="Chat on WhatsApp"
-            >
-              <MessageCircle className="w-5 h-5 fill-emerald-600/15" />
-            </a>
-
-            {/* Profile Icon */}
+            {/* Message Icon - Links to Contact Us with Green Color */}
             <Link
               to="/contact"
-              className="p-2 text-neutral-700 hover:text-[#580c22] rounded-full hover:bg-neutral-100 transition"
-              title="My Account / Help"
+              className="p-2 text-emerald-600 hover:text-emerald-700 hover:bg-emerald-50 rounded-full transition"
+              title="Contact & Support"
+            >
+              <MessageCircle className="w-5 h-5 fill-emerald-600/15" />
+            </Link>
+
+            {/* Admin Badge Link (Visible if role === 'admin') */}
+            {userProfile?.role === 'admin' && (
+              <Link
+                to="/admin"
+                className="p-1.5 bg-[#580c22] text-white hover:bg-[#450719] rounded-full transition flex items-center justify-center"
+                title="Admin Dashboard"
+              >
+                <ShieldCheck className="w-4 h-4" />
+              </Link>
+            )}
+
+            {/* User Profile Icon - Links to Login Page */}
+            <Link
+              to={userProfile?.role === 'admin' ? '/admin' : '/login'}
+              className={`p-2 rounded-full transition ${
+                isActive('/login') || isActive('/admin')
+                  ? 'text-[#580c22] bg-neutral-100'
+                  : 'text-neutral-700 hover:text-[#580c22] hover:bg-neutral-100'
+              }`}
+              title={userProfile ? `Account (${userProfile.name})` : "Account / Login"}
             >
               <User className="w-5 h-5" />
             </Link>

@@ -100,7 +100,11 @@ Please share delivery timeframe and UPI / payment details.`;
 
           <div>
             <h2 className="font-serif text-xl font-bold text-neutral-900">{product.name}</h2>
-            <p className="text-xs text-neutral-500 mt-0.5">Color: <strong className="text-neutral-700">{product.color}</strong> | SKU: {product.sku}</p>
+            <p className="text-xs text-neutral-500 mt-0.5">
+              Color: <strong className="text-neutral-700">{product.color}</strong>
+              {product.ageGroup && <> | Age/Size: <strong className="text-purple-800">{product.ageGroup}</strong></>}
+              | SKU: {product.sku}
+            </p>
           </div>
 
           <div className="flex items-baseline gap-2 py-2 border-y border-neutral-100">
@@ -112,20 +116,31 @@ Please share delivery timeframe and UPI / payment details.`;
           <div className="bg-neutral-50 rounded-xl p-3 text-xs space-y-1.5 border border-neutral-200">
             <div className="flex items-center gap-1.5 font-bold text-neutral-900 mb-1">
               <Scissors className="w-3.5 h-3.5" />
-              <span>Exact Cut Yardage:</span>
+              <span>{product.specificationsTitle || 'Exact Cut Yardage:'}</span>
             </div>
-            <div className="flex justify-between text-neutral-600">
-              <span>Top / Kurta:</span>
-              <span className="font-semibold text-neutral-800">{product.topCut}</span>
-            </div>
-            <div className="flex justify-between text-neutral-600">
-              <span>Bottom / Salwar:</span>
-              <span className="font-semibold text-neutral-800">{product.bottomCut}</span>
-            </div>
-            <div className="flex justify-between text-neutral-600">
-              <span>Dupatta / Stole:</span>
-              <span className="font-semibold text-neutral-800">{product.dupattaCut}</span>
-            </div>
+            {product.specifications && product.specifications.length > 0 ? (
+              product.specifications.map((spec, idx) => (
+                <div key={spec.id || idx} className="flex justify-between text-neutral-600">
+                  <span>{spec.label}:</span>
+                  <span className="font-semibold text-neutral-800">{spec.value || 'N/A'}</span>
+                </div>
+              ))
+            ) : (
+              <>
+                <div className="flex justify-between text-neutral-600">
+                  <span>Top / Kurta:</span>
+                  <span className="font-semibold text-neutral-800">{product.topCut}</span>
+                </div>
+                <div className="flex justify-between text-neutral-600">
+                  <span>Bottom / Salwar:</span>
+                  <span className="font-semibold text-neutral-800">{product.bottomCut}</span>
+                </div>
+                <div className="flex justify-between text-neutral-600">
+                  <span>Dupatta / Stole:</span>
+                  <span className="font-semibold text-neutral-800">{product.dupattaCut}</span>
+                </div>
+              </>
+            )}
           </div>
 
           <p className="text-xs text-neutral-600 leading-relaxed">
