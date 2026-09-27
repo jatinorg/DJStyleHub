@@ -58,7 +58,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
     
     let itemSummary = items.map((item, idx) => 
       `${idx + 1}. *${item.product.name}* (${item.product.sku})
-   - Fabric: ${item.product.fabric} (${item.product.category === 'women' ? "Women" : "Kids"})
+   - Fabric: ${item.product.fabric} (${item.product.category === 'women' ? "Women" : "Girls"})
    - Qty: ${item.quantity} x ₹${item.product.price.toLocaleString('en-IN')} = ₹${(item.quantity * item.product.price).toLocaleString('en-IN')}`
     ).join('\n\n');
 
@@ -147,7 +147,7 @@ ${customerName ? `*Name:* ${customerName}\n*Phone:* ${customerPhone}\n*Address:*
                         <Trash2 className="w-3.5 h-3.5" />
                       </button>
                     </div>
-                    <span className="text-[11px] text-neutral-500">{item.product.fabric} • {item.product.category === 'women' ? 'Women' : 'Kids'}</span>
+                    <span className="text-[11px] text-neutral-500">{item.product.fabric} • {item.product.category === 'women' ? 'Women' : 'Girls'}</span>
                   </div>
 
                   <div className="flex items-center justify-between pt-2">

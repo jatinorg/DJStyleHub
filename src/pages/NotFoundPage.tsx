@@ -8,7 +8,7 @@ export const NotFoundPage: React.FC = () => {
     <div className="max-w-3xl mx-auto px-4 sm:px-6 py-20 text-center space-y-6">
       <SEO
         title="Page Not Found | DJStyleHub"
-        description="The page you requested could not be found on DJStyleHub. Browse our exclusive unstitched dress materials for women and kids."
+        description="The page you requested could not be found on DJStyleHub. Browse our exclusive unstitched dress materials for women and girls."
         robots="noindex, nofollow"
         canonicalUrl="https://djstylehub.com/404"
       />
@@ -46,7 +46,7 @@ export const NotFoundPage: React.FC = () => {
           to="/category/kids"
           className="inline-flex items-center gap-1.5 px-4 py-2.5 bg-neutral-100 text-neutral-700 text-xs font-semibold rounded-lg hover:bg-neutral-200 transition"
         >
-          <span>Kids' Collection</span>
+          <span>Girls' Collection</span>
           <ArrowRight className="w-3.5 h-3.5" />
         </Link>
       </div>

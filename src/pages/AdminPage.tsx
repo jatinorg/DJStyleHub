@@ -39,10 +39,12 @@ import {
   Minus,
   Globe,
   Eye,
-  EyeOff
+  EyeOff,
+  Video
 } from 'lucide-react';
 import { collection, getDocs } from 'firebase/firestore';
-import { db } from '../firebase/config';
+import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
+import { db, storage } from '../firebase/config';
 import { useAuth, UserProfile } from '../context/AuthContext';
 import { useProducts } from '../context/ProductContext';
 import { SEO } from '../components/SEO';
@@ -61,6 +63,8 @@ export const AdminPage: React.FC = () => {
   // Selected category in sidebar (default: 'Sarees')
   const [selectedCategory, setSelectedCategory] = useState<string>('Sarees');
   const [productSearch, setProductSearch] = useState('');
+  const [isUploadingVideo, setIsUploadingVideo] = useState(false);
+  const [videoProgress, setVideoProgress] = useState(0);
 
   // Selected product ID being edited in right panel
   const [selectedProductId, setSelectedProductId] = useState<string>(() => productList[0]?.id || 'bs-01');
@@ -132,12 +136,12 @@ export const AdminPage: React.FC = () => {
       matchFn: (p: Product) => p.category === 'nightwear'
     },
     {
-      id: 'Kids Wear',
-      name: 'Kids Wear',
+      id: 'Girls Wear',
+      name: 'Girls Wear',
       emoji: '👧',
-      description: 'Ethnic & Festive Wear for Kids',
+      description: 'Ethnic & Festive Wear for Girls',
       badgeBg: 'bg-emerald-100 text-emerald-800',
-      matchFn: (p: Product) => p.category === 'kids'
+      matchFn: (p: Product) => p.category === 'kids' || p.category === ('girls' as any)
     },
     {
       id: 'Accessories',
@@ -217,6 +221,7 @@ export const AdminPage: React.FC = () => {
       'Kurti & Sets': 'kurti-sets',
       'Fabrics': 'fabrics',
       "Women's Nightwear": 'nightwear',
+      'Girls Wear': 'kids',
       'Kids Wear': 'kids',
       'Accessories': 'accessories',
       'Home & Living': 'home-living'
@@ -416,6 +421,59 @@ export const AdminPage: React.FC = () => {
     };
 
     reader.readAsDataURL(file);
+    e.target.value = '';
+  };
+
+  // Handle uploading product video from device with instant local preview & cloud sync
+  const handleVideoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (!files || files.length === 0) return;
+    const file = files[0];
+
+    setIsUploadingVideo(true);
+    setVideoProgress(20);
+
+    // 1. Instant local FileReader preview - never hangs or gets stuck!
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+      const result = ev.target?.result as string;
+      if (result) {
+        setFormData((prev) => ({ ...prev, videoUrl: result }));
+        setIsUploadingVideo(false);
+        setVideoProgress(100);
+        showToast(`🎥 Video "${file.name}" loaded! Remember to click "Save Product Changes".`);
+      }
+    };
+    reader.readAsDataURL(file);
+
+    // 2. Background Cloud Storage sync
+    try {
+      const storageRef = ref(storage, `product-videos/${Date.now()}_${file.name.replace(/[^a-zA-Z0-9._-]/g, '_')}`);
+      const uploadTask = uploadBytesResumable(storageRef, file);
+
+      uploadTask.on(
+        'state_changed',
+        (snapshot: any) => {
+          const progress = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
+          setVideoProgress(progress);
+        },
+        (error: any) => {
+          console.warn('Storage sync notice (using local file link):', error);
+        },
+        async () => {
+          try {
+            const downloadUrl = await getDownloadURL(uploadTask.snapshot.ref);
+            setFormData((prev) => ({ ...prev, videoUrl: downloadUrl }));
+            showToast(`☁️ Cloud Storage synchronized for video "${file.name}"!`);
+          } catch (urlErr) {
+            console.warn('URL sync notice:', urlErr);
+          }
+        }
+      );
+    } catch (err) {
+      console.warn('Background storage notice:', err);
+    }
+
     e.target.value = '';
   };
 
@@ -920,7 +978,7 @@ export const AdminPage: React.FC = () => {
                             <option value="kurti-sets">👗 Kurti &amp; Sets</option>
                             <option value="fabrics">🧵 Fabrics</option>
                             <option value="nightwear">🌙 Women's Nightwear</option>
-                            <option value="kids">👧 Kids Wear</option>
+                            <option value="kids">👧 Girls Wear</option>
                             <option value="accessories">👜 Accessories</option>
                             <option value="home-living">🏡 Home &amp; Living</option>
                           </select>
@@ -1136,7 +1194,7 @@ export const AdminPage: React.FC = () => {
                         </div>
                       </div>
 
-                      <div className={`grid grid-cols-1 ${formData.category === 'kids' || selectedCategory === 'Kids Wear' ? 'sm:grid-cols-5' : 'sm:grid-cols-4'} gap-3`}>
+                      <div className={`grid grid-cols-1 ${formData.category === 'kids' || selectedCategory === 'Kids Wear' || selectedCategory === 'Girls Wear' ? 'sm:grid-cols-5' : 'sm:grid-cols-4'} gap-3`}>
                         <div>
                           <label className="text-[10px] font-bold text-neutral-500 uppercase tracking-wider block mb-1">
                             Selling Price (₹)
@@ -1161,7 +1219,7 @@ export const AdminPage: React.FC = () => {
                           />
                         </div>
 
-                        {(formData.category === 'kids' || selectedCategory === 'Kids Wear') && (
+                        {(formData.category === 'kids' || selectedCategory === 'Kids Wear' || selectedCategory === 'Girls Wear') && (
                           <div>
                             <label className="text-[10px] font-bold text-purple-800 uppercase tracking-wider block mb-1">
                               Age / Size Group
@@ -1250,6 +1308,86 @@ export const AdminPage: React.FC = () => {
                             </button>
                           </div>
                         ))}
+                      </div>
+                    </div>
+
+                    {/* Product Video Upload Card */}
+                    <div className="bg-white border border-neutral-200/90 rounded-2xl p-5 space-y-4 shadow-xs">
+                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-neutral-200 pb-3">
+                        <div>
+                          <h4 className="font-semibold text-xs text-[#580c22] uppercase tracking-wider flex items-center gap-1.5">
+                            <Video className="w-4 h-4 text-purple-700" />
+                            <span>Product Showcase Video (Auto-plays for Customers)</span>
+                          </h4>
+                          <p className="text-[11px] text-neutral-500 mt-0.5">
+                            Upload a video from your device or paste an MP4/web video link. This video will play by default on the product page.
+                          </p>
+                        </div>
+
+                        <label className={`text-white text-[11px] font-bold px-3 py-1.5 rounded-xl cursor-pointer flex items-center gap-1.5 transition shadow-xs shrink-0 self-start sm:self-auto ${
+                          isUploadingVideo ? 'bg-neutral-400 cursor-not-allowed' : 'bg-purple-900 hover:bg-purple-950'
+                        }`}>
+                          <Upload className="w-3.5 h-3.5" />
+                          <span>{isUploadingVideo ? `Uploading (${videoProgress}%)` : 'Upload Video File'}</span>
+                          <input
+                            type="file"
+                            accept="video/*"
+                            disabled={isUploadingVideo}
+                            className="hidden"
+                            onChange={(e) => handleVideoUpload(e)}
+                          />
+                        </label>
+                      </div>
+
+                      <div className="space-y-2">
+                        {isUploadingVideo && (
+                          <div className="p-3 bg-purple-50 border border-purple-200 rounded-xl space-y-1.5">
+                            <div className="flex items-center justify-between text-xs font-bold text-purple-900">
+                              <span>Uploading Video to Cloud Storage...</span>
+                              <span>{videoProgress}%</span>
+                            </div>
+                            <div className="w-full bg-purple-200 h-2 rounded-full overflow-hidden">
+                              <div
+                                className="bg-purple-700 h-full transition-all duration-300"
+                                style={{ width: `${videoProgress}%` }}
+                              />
+                            </div>
+                          </div>
+                        )}
+                        <div className="flex items-center gap-2">
+                          <input
+                            type="text"
+                            value={formData.videoUrl || ''}
+                            onChange={(e) => setFormData({ ...formData, videoUrl: e.target.value })}
+                            placeholder="Video Link URL (e.g. https://domain.com/video.mp4 or Local Data URL)"
+                            className="flex-1 bg-neutral-50 border border-neutral-300 rounded-xl py-2 px-3 text-xs text-neutral-800 font-mono focus:outline-none focus:border-[#580c22] focus:bg-white"
+                          />
+                          {formData.videoUrl && (
+                            <button
+                              type="button"
+                              onClick={() => setFormData({ ...formData, videoUrl: '' })}
+                              className="text-xs text-red-600 hover:underline font-bold px-2"
+                            >
+                              Remove
+                            </button>
+                          )}
+                        </div>
+
+                        {formData.videoUrl && (
+                          <div className="mt-3 p-3 bg-neutral-900 rounded-xl max-w-sm">
+                            <span className="text-[10px] font-bold text-neutral-400 uppercase tracking-wider block mb-1">
+                              Live Video Preview:
+                            </span>
+                            <video
+                              src={formData.videoUrl}
+                              controls
+                              autoPlay
+                              loop
+                              muted
+                              className="w-full h-48 object-cover rounded-lg border border-neutral-700"
+                            />
+                          </div>
+                        )}
                       </div>
                     </div>
 

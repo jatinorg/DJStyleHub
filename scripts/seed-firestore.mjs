@@ -21,7 +21,7 @@ async function syncUsersToFirestore() {
     uid: 'user_madhukaran',
     name: 'Madhukaran Reddy',
     email: 'madhukaran52@gmail.com',
-    phone: '9296600679',
+    phone: '7093911448',
     role: 'admin',
     createdAt: new Date().toISOString()
   });

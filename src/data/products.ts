@@ -5,8 +5,8 @@ export const STORE_INFO = {
   legalName: 'DJStyleHub',
   domain: 'https://djstylehub.com',
   tagline: 'Wear Your Story',
-  whatsappNumber: '+916300818215',
-  displayPhone: '+91 63008 18215',
+  whatsappNumber: '+917093911448',
+  displayPhone: '+91 70939 11448',
   instagramUrl: 'https://www.instagram.com/djstyle_hub?stkn=OWowdmw0b3lpOTN5',
   youtubeUrl: 'https://youtube.com/@djstylehub?si=a-WIVGqxXkG1ZvFg',
   email: 'orders@djstylehub.com',
@@ -29,7 +29,7 @@ export const REVIEWS: Review[] = [
     userName: 'Pooja Iyer',
     rating: 5,
     date: '1 week ago',
-    comment: 'Ordered the kids brocade lehenga fabric for my 6-year-old daughter for a family wedding. The cotton lining provided inside prevented any itching. She was dancing happily all evening!',
+    comment: 'Ordered the girls brocade lehenga fabric for my 6-year-old daughter for a family wedding. The cotton lining provided inside prevented any itching. She was dancing happily all evening!',
     verifiedPurchase: true
   },
   {

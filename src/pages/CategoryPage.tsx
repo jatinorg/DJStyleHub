@@ -170,7 +170,7 @@ export const CategoryPage: React.FC<CategoryPageProps> = ({
                 : 'bg-neutral-100 text-neutral-700 hover:bg-neutral-200'
             }`}
           >
-            Kids' Collection ({products.filter(p => p.category === 'kids' || p.subcategory.toLowerCase().includes('kid')).length})
+            Girls' Collection ({products.filter(p => p.category === 'kids' || p.category === ('girls' as any) || p.subcategory.toLowerCase().includes('kid') || p.subcategory.toLowerCase().includes('girl')).length})
           </Link>
         </div>
       </header>

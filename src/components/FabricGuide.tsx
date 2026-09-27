@@ -47,14 +47,14 @@ export const FabricGuide: React.FC = () => {
             </ul>
           </div>
 
-          {/* Card 2: Kids Comfort */}
+          {/* Card 2: Girls Comfort */}
           <div className="bg-white p-5 rounded-xl border border-neutral-200 space-y-3 shadow-xs">
             <div className="flex items-center gap-2 font-bold text-neutral-900 text-sm">
               <Sparkles className="w-4 h-4 text-neutral-700" />
-              <h4>Kids' Comfort Standards</h4>
+              <h4>Girls' Comfort Standards</h4>
             </div>
             <p className="text-neutral-600 leading-relaxed">
-              Children's dress materials are crafted specifically to keep young skin happy:
+              Girls' dress materials are crafted specifically to keep young skin happy:
             </p>
             <ul className="space-y-1.5 text-neutral-700">
               <li>• Includes soft cotton skin barrier linings</li>

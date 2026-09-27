@@ -58,7 +58,7 @@ export const AboutPage: React.FC = () => {
             At <strong>DJStyleHub</strong>, we believe true style lies in individual choice and tailored comfort. While mass-produced ready-made apparel often forces compromises in fit, neckline, and length, our handpicked unstitched dress materials allow you and your master tailor to create bespoke masterpieces crafted to your exact preferences.
           </p>
           <p>
-            We focus exclusively on two deeply cherished categories: <strong>Women's Dress Materials</strong> (ranging from airy Jaipuri pure mulmul cottons and handloom linen to regal Chanderi silks and Chikankari embroideries) and <strong>Kids' Ethnic Fabrics</strong> (designed with itch-free skin barrier linings and certified gentle dyes).
+            We focus exclusively on two deeply cherished categories: <strong>Women's Dress Materials</strong> (ranging from airy Jaipuri pure mulmul cottons and handloom linen to regal Chanderi silks and Chikankari embroideries) and <strong>Girls' Ethnic Fabrics</strong> (designed with itch-free skin barrier linings and certified gentle dyes).
           </p>
         </section>
 
@@ -90,7 +90,7 @@ export const AboutPage: React.FC = () => {
               <h3>Child-Safe Fabrics</h3>
             </div>
             <p className="text-xs text-neutral-600 leading-relaxed">
-              Kids need garments that move with them. Our kids materials include butter-crepe linings to prevent collar itching, paired with lightweight volume so children stay joyous.
+              Girls need garments that move with them. Our girls materials include butter-crepe linings to prevent collar itching, paired with lightweight volume so children stay joyous.
             </p>
           </div>
 
@@ -122,7 +122,7 @@ export const AboutPage: React.FC = () => {
               to="/category/kids"
               className="px-4 py-2 bg-neutral-800 text-white border border-neutral-700 rounded-lg text-xs font-semibold hover:bg-neutral-700 transition"
             >
-              Kids' Collection
+              Girls' Collection
             </Link>
           </div>
         </section>

@@ -62,7 +62,7 @@ export const WishlistModal: React.FC<WishlistModalProps> = ({
                 />
                 <div className="flex-1 min-w-0">
                   <h4 className="font-bold text-xs text-neutral-900 truncate">{product.name}</h4>
-                  <p className="text-[11px] text-neutral-500">{product.fabric} • {product.category === 'women' ? "Women" : "Kids"}</p>
+                  <p className="text-[11px] text-neutral-500">{product.fabric} • {product.category === 'women' ? "Women" : "Girls"}</p>
                   <p className="text-xs font-bold text-neutral-900 mt-1">₹{product.price.toLocaleString('en-IN')}</p>
                 </div>
                 <div className="flex flex-col gap-1 shrink-0">

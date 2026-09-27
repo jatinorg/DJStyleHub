@@ -10,7 +10,12 @@ import {
   ShieldCheck, 
   Truck, 
   RefreshCw, 
-  ArrowLeft 
+  ArrowLeft,
+  ChevronLeft,
+  ChevronRight,
+  Share2,
+  Video,
+  Play
 } from 'lucide-react';
 import { SEO } from '../components/SEO';
 import { Breadcrumbs } from '../components/Breadcrumbs';
@@ -35,8 +40,103 @@ export const ProductPage: React.FC<ProductPageProps> = ({
   const product = slug ? getProductBySlugOrId(slug) : undefined;
 
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+  const [showVideo, setShowVideo] = useState<boolean>(!!product?.videoUrl);
   const [quantity, setQuantity] = useState(1);
   const [added, setAdded] = useState(false);
+  const [copied, setCopied] = useState(false);
+  const [touchStartX, setTouchStartX] = useState<number | null>(null);
+
+  React.useEffect(() => {
+    if (product?.videoUrl) {
+      setShowVideo(true);
+    }
+  }, [product?.id, product?.videoUrl]);
+
+  const handleShareProduct = async (e?: React.MouseEvent) => {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+    if (!product) return;
+    const shareUrl = `${window.location.origin}/product/${product.slug || product.id}`;
+    const shareData = {
+      title: product.name,
+      text: `Check out ${product.name} on DJStyleHub!`,
+      url: shareUrl,
+    };
+
+    if (navigator.share) {
+      try {
+        await navigator.share(shareData);
+      } catch (err) {
+        console.log('Share dismissed');
+      }
+    } else {
+      try {
+        await navigator.clipboard.writeText(shareUrl);
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
+      } catch (err) {
+        console.warn('Clipboard write error:', err);
+      }
+    }
+  };
+
+  const handlePrevImage = (e?: React.MouseEvent) => {
+    if (e) e.stopPropagation();
+    if (!product || !product.images || product.images.length <= 1) return;
+    setSelectedImageIndex((prev) => (prev === 0 ? product.images.length - 1 : prev - 1));
+  };
+
+  const handleNextImage = (e?: React.MouseEvent) => {
+    if (e) e.stopPropagation();
+    if (!product || !product.images || product.images.length <= 1) return;
+    setSelectedImageIndex((prev) => (prev === product.images.length - 1 ? 0 : prev + 1));
+  };
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    setTouchStartX(e.touches[0].clientX);
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    if (touchStartX === null) return;
+    const touchEndX = e.changedTouches[0].clientX;
+    const diffX = touchStartX - touchEndX;
+    if (diffX > 40) {
+      handleNextImage();
+    } else if (diffX < -40) {
+      handlePrevImage();
+    }
+    setTouchStartX(null);
+  };
+
+  const handleMouseDown = (e: React.MouseEvent) => {
+    setTouchStartX(e.clientX);
+  };
+
+  const handleMouseUp = (e: React.MouseEvent) => {
+    if (touchStartX === null) return;
+    const diffX = touchStartX - e.clientX;
+    if (diffX > 40) {
+      handleNextImage();
+    } else if (diffX < -40) {
+      handlePrevImage();
+    }
+    setTouchStartX(null);
+  };
+
+  // Enable Keyboard Arrow Left / Right key navigation
+  React.useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'ArrowLeft') {
+        handlePrevImage();
+      } else if (e.key === 'ArrowRight') {
+        handleNextImage();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [product, selectedImageIndex]);
 
   const relatedProducts = useMemo(() => {
     if (!product) return [];
@@ -65,7 +165,7 @@ export const ProductPage: React.FC<ProductPageProps> = ({
 I would like to order:
 *${product.name}*
 SKU: ${product.sku}
-Category: ${product.category === 'women' ? "Women's Material" : "Kids' Material"}
+Category: ${product.category === 'women' ? "Women's Material" : "Girls' Material"}
 Fabric: ${product.fabric}
 Color: ${product.color}
 Quantity: ${quantity}
@@ -84,7 +184,7 @@ Please confirm availability and share payment/delivery options!`;
   };
 
   // Breadcrumbs
-  const categoryName = product.category === 'women' ? "Women's Dresses" : "Kids' Clothing";
+  const categoryName = product.category === 'women' ? "Women's Dresses" : "Girls' Clothing";
   const categoryUrl = `/category/${product.category}`;
   const breadcrumbs = [
     { name: categoryName, url: categoryUrl },
@@ -189,52 +289,155 @@ Please confirm availability and share payment/delivery options!`;
         
         {/* Gallery Column */}
         <div className="md:col-span-6 space-y-4">
-          <div className="relative aspect-[4/5] rounded-xl overflow-hidden bg-neutral-100 border border-neutral-200">
-            <img
-              src={product.images[selectedImageIndex] || product.images[0]}
-              alt={primaryImageAlt}
-              width={700}
-              height={875}
-              fetchPriority="high"
-              decoding="async"
-              className="w-full h-full object-cover object-center"
-            />
+          <div 
+            className="relative aspect-[4/5] rounded-xl overflow-hidden bg-neutral-100 border border-neutral-200 touch-pan-y cursor-grab active:cursor-grabbing select-none"
+            onTouchStart={handleTouchStart}
+            onTouchEnd={handleTouchEnd}
+            onMouseDown={handleMouseDown}
+            onMouseUp={handleMouseUp}
+          >
+            {showVideo && product.videoUrl ? (
+              <video
+                src={product.videoUrl}
+                controls
+                autoPlay
+                loop
+                muted
+                playsInline
+                className="w-full h-full object-cover object-center"
+              />
+            ) : (
+              <img
+                src={product.images[selectedImageIndex] || product.images[0]}
+                alt={primaryImageAlt}
+                width={700}
+                height={875}
+                fetchPriority="high"
+                decoding="async"
+                className="w-full h-full object-cover object-center transition-all duration-200 pointer-events-none"
+              />
+            )}
+
+            {/* Previous & Next Navigation Arrows */}
+            {!showVideo && product.images.length > 1 && (
+              <>
+                <button
+                  type="button"
+                  onClick={handlePrevImage}
+                  className="absolute left-3 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-white/90 hover:bg-white text-neutral-900 shadow-lg flex items-center justify-center transition border border-neutral-300 active:scale-95 cursor-pointer"
+                  aria-label="Previous image"
+                >
+                  <ChevronLeft className="w-6 h-6" />
+                </button>
+                <button
+                  type="button"
+                  onClick={handleNextImage}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-white/90 hover:bg-white text-neutral-900 shadow-lg flex items-center justify-center transition border border-neutral-300 active:scale-95 cursor-pointer"
+                  aria-label="Next image"
+                >
+                  <ChevronRight className="w-6 h-6" />
+                </button>
+              </>
+            )}
+
+            {/* Photo Counter Badge */}
+            {!showVideo && product.images.length > 1 && (
+              <div className="absolute bottom-3 right-3 z-10 bg-black/65 text-white text-[11px] font-semibold px-2.5 py-1 rounded-full backdrop-blur-xs flex items-center gap-1 shadow-xs pointer-events-none">
+                <span>{selectedImageIndex + 1} / {product.images.length}</span>
+              </div>
+            )}
 
             {/* Badges */}
-            <div className="absolute top-3 left-3 flex flex-col gap-1.5">
+            <div className="absolute top-3 left-3 flex flex-col gap-1.5 z-10">
+              {product.videoUrl && (
+                <span className="bg-purple-900 text-white text-[11px] font-bold uppercase px-2.5 py-1 rounded shadow-xs flex items-center gap-1">
+                  <Video className="w-3.5 h-3.5 text-amber-300" />
+                  <span>Video Preview</span>
+                </span>
+              )}
               {product.badge && (
                 <span className="bg-neutral-900 text-white text-[11px] font-bold uppercase px-2.5 py-1 rounded shadow-xs">
                   {product.badge}
                 </span>
               )}
               <span className="bg-white/95 text-neutral-800 text-[11px] font-semibold px-2 py-0.5 rounded shadow-xs">
-                {product.category === 'women' ? "Women's Collection" : "Kids' Collection"}
+                {product.category === 'women' ? "Women's Collection" : "Girls' Collection"}
               </span>
             </div>
 
-            {/* Wishlist Button */}
-            <button
-              onClick={() => onToggleWishlist(product)}
-              className={`absolute top-3 right-3 p-2 rounded-full shadow-md transition ${
-                isWishlisted
-                  ? 'bg-red-50 text-red-600'
-                  : 'bg-white/90 text-neutral-600 hover:text-red-500'
-              }`}
-              aria-label={isWishlisted ? 'Remove from wishlist' : 'Add to wishlist'}
-            >
-              <Heart className={`w-5 h-5 ${isWishlisted ? 'fill-current' : ''}`} />
-            </button>
+            {/* Share & Wishlist Buttons */}
+            <div className="absolute top-3 right-3 z-10 flex items-center gap-2">
+              <button
+                onClick={handleShareProduct}
+                className={`p-2 rounded-full shadow-md transition cursor-pointer ${
+                  copied
+                    ? 'bg-emerald-50 text-emerald-700'
+                    : 'bg-white/90 text-neutral-600 hover:text-[#580c22]'
+                }`}
+                title={copied ? 'Link copied to clipboard!' : 'Share Product'}
+                aria-label="Share product"
+              >
+                {copied ? <Check className="w-5 h-5 text-emerald-600" /> : <Share2 className="w-5 h-5" />}
+              </button>
+
+              <button
+                onClick={() => onToggleWishlist(product)}
+                className={`p-2 rounded-full shadow-md transition ${
+                  isWishlisted
+                    ? 'bg-red-50 text-red-600'
+                    : 'bg-white/90 text-neutral-600 hover:text-red-500'
+                }`}
+                aria-label={isWishlisted ? 'Remove from wishlist' : 'Add to wishlist'}
+              >
+                <Heart className={`w-5 h-5 ${isWishlisted ? 'fill-current' : ''}`} />
+              </button>
+            </div>
           </div>
 
-          {/* Thumbnails */}
-          {product.images.length > 1 && (
-            <div className="flex gap-3 overflow-x-auto pb-1" aria-label="Product image thumbnails">
-              {product.images.map((img, idx) => (
+          {/* Swipe Indicator Dots on Mobile */}
+          {!showVideo && product.images.length > 1 && (
+            <div className="flex justify-center items-center gap-1.5 py-1">
+              {product.images.map((_, idx) => (
                 <button
                   key={idx}
                   onClick={() => setSelectedImageIndex(idx)}
+                  className={`h-2 rounded-full transition-all duration-200 ${
+                    selectedImageIndex === idx ? 'w-6 bg-[#580c22]' : 'w-2 bg-neutral-300 hover:bg-neutral-400'
+                  }`}
+                  aria-label={`Go to image ${idx + 1}`}
+                />
+              ))}
+            </div>
+          )}
+
+          {/* Thumbnails */}
+          {(product.videoUrl || product.images.length > 1) && (
+            <div className="flex gap-3 overflow-x-auto pb-1" aria-label="Product media thumbnails">
+              {product.videoUrl && (
+                <button
+                  type="button"
+                  onClick={() => setShowVideo(true)}
+                  className={`w-20 h-24 rounded-lg overflow-hidden border-2 transition shrink-0 relative bg-purple-950 flex flex-col items-center justify-center text-white ${
+                    showVideo
+                      ? 'border-purple-600 ring-2 ring-purple-600/30'
+                      : 'border-neutral-200 opacity-70 hover:opacity-100'
+                  }`}
+                  title="Watch Product Video"
+                >
+                  <Video className="w-6 h-6 text-amber-300" />
+                  <span className="text-[10px] font-bold mt-1 uppercase tracking-wider text-amber-200">Video</span>
+                </button>
+              )}
+
+              {product.images.map((img, idx) => (
+                <button
+                  key={idx}
+                  onClick={() => {
+                    setShowVideo(false);
+                    setSelectedImageIndex(idx);
+                  }}
                   className={`w-20 h-24 rounded-lg overflow-hidden border-2 transition shrink-0 ${
-                    selectedImageIndex === idx
+                    !showVideo && selectedImageIndex === idx
                       ? 'border-neutral-900 ring-2 ring-neutral-900/10'
                       : 'border-neutral-200 opacity-70 hover:opacity-100'
                   }`}
@@ -384,26 +587,35 @@ Please confirm availability and share payment/delivery options!`;
               </span>
             </div>
 
-            {/* Prominent WhatsApp Instant Order Button */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            {/* Prominent WhatsApp Instant Order, Add to Bag & Share Buttons */}
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
               <a
                 href={getWhatsAppMessageUrl()}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-full py-3 px-4 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs sm:text-sm font-bold flex items-center justify-center gap-2 shadow-sm transition active:scale-98"
+                className="w-full py-3 px-3 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 shadow-sm transition active:scale-98"
                 title={`Order ${product.name} on WhatsApp`}
               >
-                <MessageCircle className="w-4 h-4 fill-white/20" />
-                <span>Instant Order on WhatsApp</span>
+                <MessageCircle className="w-4 h-4 fill-white/20 shrink-0" />
+                <span>WhatsApp Order</span>
               </a>
 
               <button
                 onClick={handleAddToCart}
-                className="w-full py-3 px-4 bg-neutral-900 hover:bg-neutral-800 text-white rounded-xl text-xs sm:text-sm font-semibold flex items-center justify-center gap-2 transition"
+                className="w-full py-3 px-3 bg-neutral-900 hover:bg-neutral-800 text-white rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5 transition"
                 aria-label={`Add ${quantity} ${product.name} to bag`}
               >
-                <ShoppingBag className="w-4 h-4" />
+                <ShoppingBag className="w-4 h-4 shrink-0" />
                 <span>{added ? 'Added to Bag!' : 'Add to Bag'}</span>
+              </button>
+
+              <button
+                onClick={handleShareProduct}
+                className="w-full py-3 px-3 bg-neutral-100 hover:bg-neutral-200 text-neutral-800 border border-neutral-300 rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5 transition cursor-pointer"
+                title="Share this product"
+              >
+                {copied ? <Check className="w-4 h-4 text-emerald-600 shrink-0" /> : <Share2 className="w-4 h-4 shrink-0" />}
+                <span>{copied ? 'Link Copied!' : 'Share Product'}</span>
               </button>
             </div>
 
@@ -438,7 +650,7 @@ Please confirm availability and share payment/delivery options!`;
                 You May Also Like
               </h2>
               <p className="text-xs text-neutral-500 mt-1">
-                More {product.category === 'women' ? "women's dress materials" : "kids' materials"}
+                More {product.category === 'women' ? "women's dress materials" : "girls' materials"}
               </p>
             </div>
             <Link 

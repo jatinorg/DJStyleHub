@@ -20,6 +20,7 @@ export interface Product {
   description: string;
   features: string[];
   images: string[];
+  videoUrl?: string;
   badge?: string;
   inStock: boolean;
   published?: boolean;

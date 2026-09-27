@@ -185,6 +185,17 @@ export function AppContent() {
             }
           />
           <Route
+            path="/girls-dress-materials"
+            element={
+              <CategoryPage
+                onAddToCart={handleAddToCart}
+                wishlist={wishlist}
+                onToggleWishlist={handleToggleWishlist}
+                overrideCategory="kids"
+              />
+            }
+          />
+          <Route
             path="/product/:slug"
             element={
               <ProductPage

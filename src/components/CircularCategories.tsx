@@ -31,7 +31,7 @@ const CATEGORIES: CircularCategory[] = [
     image: 'https://images.unsplash.com/photo-1609357605129-26f69add5d6e?auto=format&fit=crop&w=300&q=80'
   },
   {
-    title: 'Kids Wear',
+    title: 'Girls Wear',
     link: '/category/kids',
     image: 'https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=300&q=80'
   },

@@ -109,7 +109,7 @@ export const Header: React.FC<HeaderProps> = ({
                   : 'hover:text-[#580c22]'
               }`}
             >
-              Kids Wear
+              Girls Wear
             </Link>
 
             <Link
@@ -276,7 +276,7 @@ export const Header: React.FC<HeaderProps> = ({
               onClick={() => setMobileMenuOpen(false)}
               className={`block py-2 ${isActive('/category/kids') ? 'text-[#580c22] font-bold' : 'text-neutral-700'}`}
             >
-              Kids' Collection
+              Girls' Collection
             </Link>
             <Link
               to="/fabric-guide"

@@ -5,7 +5,7 @@ import { FabricGuide } from '../components/FabricGuide';
 
 export const FabricGuidePage: React.FC = () => {
   const pageTitle = 'Yardage & Fabric Care Guide | DJStyleHub';
-  const pageDescription = 'Learn about unstitched dress material cuts, tailoring meterage for women and kids, and fabric care tips at DJStyleHub.';
+  const pageDescription = 'Learn about unstitched dress material cuts, tailoring meterage for women and girls, and fabric care tips at DJStyleHub.';
   const canonicalUrl = 'https://djstylehub.com/fabric-guide';
 
   const breadcrumbs = [
@@ -27,7 +27,7 @@ export const FabricGuidePage: React.FC = () => {
           Unstitched Yardage &amp; Fabric Guide
         </h1>
         <p className="text-xs sm:text-sm text-neutral-600 mt-1">
-          Complete specifications on unstitched cuts, tailoring guidance for women and kids, and fabric care recommendations.
+          Complete specifications on unstitched cuts, tailoring guidance for women and girls, and fabric care recommendations.
         </p>
       </header>
 

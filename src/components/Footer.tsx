@@ -73,7 +73,7 @@ export const Footer: React.FC = () => {
               </li>
               <li>
                 <Link to="/category/kids" className="hover:text-amber-300 transition">
-                  Kids Wear
+                  Girls Wear
                 </Link>
               </li>
               <li>
